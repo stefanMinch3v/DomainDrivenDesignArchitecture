@@ -1,7 +1,8 @@
-﻿namespace PetClinic.Domain.Models.Appointments.Clients
+﻿namespace PetClinic.Domain.Models.Appointments
 {
     using Common;
     using Exceptions;
+    using SharedKernel;
 
     public class Pet : Entity<int>
     {
@@ -9,7 +10,6 @@
         {
             this.Name = name;
             this.Breed = breed;
-            this.Color = null!;
             this.Status = null!;
             this.PetType = null!;
         }
@@ -18,7 +18,6 @@
             string name,
             string breed,
             PetType petType,
-            Color color,
             PetStatus status)
         {
             Guard.AgainstEmptyString<InvalidNameException>(name, nameof(name));
@@ -27,7 +26,6 @@
             this.Name = name;
             this.Breed = breed;
             this.PetType = petType;
-            this.Color = color;
             this.Status = status;
         }
 
@@ -36,8 +34,6 @@
         public string Breed { get; }
 
         public string Name { get; }
-
-        public Color Color { get; }
 
         public PetStatus Status { get; }
     }

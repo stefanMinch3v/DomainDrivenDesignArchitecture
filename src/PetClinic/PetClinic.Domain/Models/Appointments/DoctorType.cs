@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Models.Appointments.Doctors
+﻿namespace PetClinic.Domain.Models.Appointments
 {
     using Common;
 

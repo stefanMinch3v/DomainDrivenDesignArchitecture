@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Models.Appointments
+﻿namespace PetClinic.Domain.Models.SharedKernel
 {
     using Common;
     using Exceptions;

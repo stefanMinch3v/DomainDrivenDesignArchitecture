@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Models.Appointments.Clients
+﻿namespace PetClinic.Domain.Models.Appointments
 {
     using Common;
     using Exceptions;

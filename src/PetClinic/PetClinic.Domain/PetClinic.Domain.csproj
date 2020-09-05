@@ -34,4 +34,8 @@
     <ProjectCapability Include="DynamicFileNesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Factories\Adoptions\" />
+  </ItemGroup>
+
 </Project>

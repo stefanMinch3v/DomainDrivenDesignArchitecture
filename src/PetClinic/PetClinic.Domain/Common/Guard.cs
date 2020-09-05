@@ -15,12 +15,34 @@
             ThrowException<TException>($"{name} cannot be null ot empty.");
         }
 
+        public static void AgainstNullObject<TException>(object value, string name = "Value")
+            where TException : BaseDomainException, new()
+        {
+            if (!(value is null))
+            {
+                return;
+            }
+
+            ThrowException<TException>($"{name} cannot be null.");
+        }
+
         public static void ForStringLength<TException>(string value, int minLength, int maxLength, string name = "Value")
             where TException : BaseDomainException, new()
         {
             AgainstEmptyString<TException>(value, name);
 
             if (minLength <= value.Length && value.Length <= maxLength)
+            {
+                return;
+            }
+
+            ThrowException<TException>($"{name} must have between {minLength} and {maxLength} symbols.");
+        }
+
+        public static void ForNumberLength<TException>(int value, float minLength, float maxLength, string name = "Value")
+            where TException : BaseDomainException, new()
+        {
+            if (minLength <= value && value <= maxLength)
             {
                 return;
             }

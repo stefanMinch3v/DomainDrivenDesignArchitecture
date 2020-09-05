@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Models.Appointments.Clients
+﻿namespace PetClinic.Domain.Models.Appointments
 {
     using Common;
     using Exceptions;
@@ -13,16 +13,10 @@
         {
             this.Name = name;
             this.Pet = default!;
-            this.Address = default!;
-            this.PhoneNumber = default!;
             this.appointments = new HashSet<Appointment>();
         }
 
-        internal Client(
-            string name,
-            Pet pet,
-            Address address,
-            PhoneNumber phoneNumber)
+        internal Client(string name, Pet pet)
         {
             Guard.ForStringLength<InvalidNameException>(
                 name,
@@ -32,8 +26,6 @@
 
             this.Name = name;
             this.Pet = pet;
-            this.Address = address;
-            this.PhoneNumber = phoneNumber;
             this.appointments = new HashSet<Appointment>();
         }
 
@@ -41,10 +33,6 @@
 
         public Pet Pet { get; }
 
-        public Address Address { get; }
-
-        public PhoneNumber PhoneNumber { get; }
-
-        public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly();
+        public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly(); // ??
     }
 }

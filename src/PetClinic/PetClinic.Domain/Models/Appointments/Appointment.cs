@@ -1,9 +1,8 @@
 ﻿namespace PetClinic.Domain.Models.Appointments
 {
-    using Clients;
     using Common;
-    using Doctors;
     using Exceptions;
+    using SharedKernel;
 
     public class Appointment : Entity<int>
     {
@@ -19,9 +18,14 @@
             Doctor doctor,
             Client client,
             AppointmentDate appointmentDate,
-            IOfficeRoom officeRoom)
+            OfficeRoom officeRoom)
         {
-            if (officeRoom.TypeOfRoom == typeof(SurgeryRoom) && doctor.DoctorType.Value != 2)
+            Guard.AgainstNullObject<InvalidDoctorException>(doctor, nameof(doctor));
+            Guard.AgainstNullObject<InvalidClientException>(client, nameof(client));
+            Guard.AgainstNullObject<InvalidAppointmentDateException>(appointmentDate, nameof(appointmentDate));
+            Guard.AgainstNullObject<InvalidOfficeRoomException>(officeRoom, nameof(officeRoom));
+
+            if (officeRoom.OfficeRoomType == OfficeRoomType.SurgeryRoom && doctor.DoctorType.Value != 2)
             {
                 throw new InvalidDoctorException("Doctor: surgery room requires specialist");
             }
@@ -38,6 +42,6 @@
 
         public AppointmentDate AppointmentDate { get; }
 
-        public IOfficeRoom OfficeRoom { get; }
+        public OfficeRoom OfficeRoom { get; }
     }
 }
