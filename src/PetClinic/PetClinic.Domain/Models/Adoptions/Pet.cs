@@ -35,6 +35,7 @@
             Guard.AgainstEmptyString<InvalidNameException>(name, nameof(name));
             Guard.AgainstEmptyString<InvalidBreedException>(breed, nameof(breed));
             Guard.ForNumberLength<InvalidAgeException>(age, ModelConstants.AgeMinLength, ModelConstants.AgeMaxLength);
+            Guard.AgainstNullObject<InvalidAddressException>(foundAt, nameof(foundAt));
 
             this.Name = name;
             this.Breed = breed;

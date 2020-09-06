@@ -39,7 +39,7 @@
             ThrowException<TException>($"{name} must have between {minLength} and {maxLength} symbols.");
         }
 
-        public static void ForNumberLength<TException>(int value, float minLength, float maxLength, string name = "Value")
+        public static void ForNumberLength<TException>(int value, int minLength, int maxLength, string name = "Value")
             where TException : BaseDomainException, new()
         {
             if (minLength <= value && value <= maxLength)

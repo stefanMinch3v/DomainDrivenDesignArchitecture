@@ -8,7 +8,8 @@
         public const int PhoneMaxLength = 15;
         public const int NameMinLength = 2;
         public const int NameMaxLength = 50;
-        public const float AgeMinLength = 0.1f;
-        public const float AgeMaxLength = 200f; // turtle
+        // in months
+        public const int AgeMinLength = 1;
+        public const int AgeMaxLength = 2400; // (200 years) turtle
     }
 }
