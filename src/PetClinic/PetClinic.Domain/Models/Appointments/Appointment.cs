@@ -4,7 +4,7 @@
     using Exceptions;
     using SharedKernel;
 
-    public class Appointment : Entity<int>
+    public class Appointment : AuditableEntity<int>
     {
         private Appointment()
         {

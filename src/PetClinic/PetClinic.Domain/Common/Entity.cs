@@ -1,13 +1,28 @@
 ﻿namespace PetClinic.Domain.Common
 {
-    public abstract class Entity<TId>
-        where TId : struct
+    using Events;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public abstract class Entity<TKey> : IEntity
+        where TKey : struct
     {
-        public TId Id { get; private set; } = default;
+        private readonly ICollection<IDomainEvent> events;
+
+        protected Entity()
+        {
+            this.events = new List<IDomainEvent>();
+        }
+
+        public TKey Id { get; private set; } = default;
+
+        public IReadOnlyCollection<IDomainEvent> Events => this.events.ToList();
+
+        public void ClearEvents() => this.events.Clear();
 
         public override bool Equals(object? obj)
         {
-            if (!(obj is Entity<TId> other))
+            if (!(obj is Entity<TKey> other))
             {
                 return false;
             }
@@ -30,7 +45,7 @@
             return this.Id.Equals(other.Id);
         }
 
-        public static bool operator ==(Entity<TId>? first, Entity<TId>? second)
+        public static bool operator ==(Entity<TKey>? first, Entity<TKey>? second)
         {
             if (first is null && second is null)
             {
@@ -45,7 +60,7 @@
             return first.Equals(second);
         }
 
-        public static bool operator !=(Entity<TId>? first, Entity<TId>? second) => !(first == second);
+        public static bool operator !=(Entity<TKey>? first, Entity<TKey>? second) => !(first == second);
 
         public override int GetHashCode() => (this.GetType().ToString() + this.Id).GetHashCode();
     }

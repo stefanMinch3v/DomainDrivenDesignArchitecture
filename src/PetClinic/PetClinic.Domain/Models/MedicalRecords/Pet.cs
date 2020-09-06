@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Pet : Entity<int>
+    public class Pet : AuditableEntity<int>
     {
         private readonly HashSet<string> diagnoses;
 

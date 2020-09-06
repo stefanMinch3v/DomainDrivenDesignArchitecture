@@ -4,7 +4,7 @@
     using Exceptions;
     using SharedKernel;
 
-    public class Pet : Entity<int>, IAggregateRoot
+    public class Pet : AuditableEntity<int>, IAggregateRoot
     {
         private Pet(
             string name, 

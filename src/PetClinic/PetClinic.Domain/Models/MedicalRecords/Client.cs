@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Client : Entity<int>, IAggregateRoot
+    public class Client : AuditableEntity<int>, IAggregateRoot
     {
         private readonly HashSet<Appointment> appointments;
 

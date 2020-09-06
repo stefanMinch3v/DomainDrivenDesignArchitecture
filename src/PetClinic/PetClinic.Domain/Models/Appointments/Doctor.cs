@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Doctor : Entity<int>, IAggregateRoot
+    public class Doctor : AuditableEntity<int>, IAggregateRoot
     {
         private readonly HashSet<Appointment> appointments;
 

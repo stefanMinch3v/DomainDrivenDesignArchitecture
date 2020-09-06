@@ -2,7 +2,7 @@
 {
     using Common;
 
-    public class OfficeRoom : Entity<int>
+    public class OfficeRoom : AuditableEntity<int>
     {
         private OfficeRoom(bool isAvailable, int number)
         {

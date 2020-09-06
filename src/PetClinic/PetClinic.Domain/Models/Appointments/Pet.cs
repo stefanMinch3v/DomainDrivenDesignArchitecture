@@ -4,7 +4,7 @@
     using Exceptions;
     using SharedKernel;
 
-    public class Pet : Entity<int>
+    public class Pet : AuditableEntity<int>
     {
         private Pet(string name, string breed)
         {
