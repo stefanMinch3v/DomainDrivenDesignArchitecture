@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.Domain", "PetClinic.Domain\PetClinic.Domain.csproj", "{257358D4-152A-43D4-AF18-A8DE7B8DA562}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetClinic.Domain", "PetClinic.Domain\PetClinic.Domain.csproj", "{257358D4-152A-43D4-AF18-A8DE7B8DA562}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.Infrastructure", "PetClinic.Infrastructure\PetClinic.Infrastructure.csproj", "{737AF045-BE4B-43DA-AC7E-FCC9EBBEE723}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.Application", "PetClinic.Application\PetClinic.Application.csproj", "{F51E7060-33A0-426D-B24D-F1E95BAD0B0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{257358D4-152A-43D4-AF18-A8DE7B8DA562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{257358D4-152A-43D4-AF18-A8DE7B8DA562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{257358D4-152A-43D4-AF18-A8DE7B8DA562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737AF045-BE4B-43DA-AC7E-FCC9EBBEE723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737AF045-BE4B-43DA-AC7E-FCC9EBBEE723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737AF045-BE4B-43DA-AC7E-FCC9EBBEE723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737AF045-BE4B-43DA-AC7E-FCC9EBBEE723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51E7060-33A0-426D-B24D-F1E95BAD0B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51E7060-33A0-426D-B24D-F1E95BAD0B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51E7060-33A0-426D-B24D-F1E95BAD0B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51E7060-33A0-426D-B24D-F1E95BAD0B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
