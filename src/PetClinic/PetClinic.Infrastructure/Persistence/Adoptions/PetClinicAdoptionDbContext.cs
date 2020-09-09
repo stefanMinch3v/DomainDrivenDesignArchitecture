@@ -1,7 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Adoptions
 {
     using Application.Contracts;
-    using Common;
     using Domain.Common;
     using Domain.Events;
     using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class PetClinicAdoptionDbContext : BaseDbContext
+    internal class PetClinicAdoptionDbContext : DbContext
     {
         private readonly ICurrentUser currentUser;
         private readonly IEventDispatcher eventDispatcher;

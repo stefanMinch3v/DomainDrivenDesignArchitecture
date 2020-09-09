@@ -9,19 +9,19 @@
     public class Client : AuditableEntity<int>, IAggregateRoot
     {
         private readonly HashSet<Appointment> appointments;
+        private readonly HashSet<Pet> pets;
 
         private Client(string name)
         {
             this.Name = name;
-            this.Pet = default!;
             this.Address = default!;
             this.PhoneNumber = default!;
             this.appointments = new HashSet<Appointment>();
+            this.pets = new HashSet<Pet>();
         }
 
         internal Client(
             string name,
-            Pet pet,
             Address address,
             PhoneNumber phoneNumber)
         {
@@ -32,19 +32,19 @@
                 nameof(name));
 
             this.Name = name;
-            this.Pet = pet;
             this.Address = address;
             this.PhoneNumber = phoneNumber;
             this.appointments = new HashSet<Appointment>();
+            this.pets = new HashSet<Pet>();
         }
 
         public string Name { get; }
 
-        public Pet Pet { get; }
-
         public Address Address { get; }
 
         public PhoneNumber PhoneNumber { get; }
+
+        public IReadOnlyCollection<Pet> Pets => this.pets.ToList().AsReadOnly();
 
         public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly();
     }

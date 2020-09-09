@@ -9,7 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class PetClinicMedicalRecordsDbContext : BaseDbContext
+    internal class PetClinicMedicalRecordsDbContext : DbContext
     {
         private readonly ICurrentUser currentUser;
         private readonly IEventDispatcher eventDispatcher;

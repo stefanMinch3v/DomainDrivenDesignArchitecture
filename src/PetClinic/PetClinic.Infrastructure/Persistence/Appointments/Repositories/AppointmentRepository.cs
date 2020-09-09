@@ -3,10 +3,11 @@
     using Application.Features.Appointments;
     using Common;
     using Domain.Models.Appointments;
+    using Microsoft.EntityFrameworkCore;
 
     internal class AppointmentRepository : DataRepository<Client>, IAppointmentRepository
     {
-        public AppointmentRepository(BaseDbContext context)
+        public AppointmentRepository(DbContext context)
             : base(context)
         {
         }

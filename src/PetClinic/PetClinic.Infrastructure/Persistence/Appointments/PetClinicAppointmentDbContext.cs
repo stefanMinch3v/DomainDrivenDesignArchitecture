@@ -1,7 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Appointments
 {
     using Application.Contracts;
-    using Common;
     using Domain.Common;
     using Domain.Events;
     using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class PetClinicAppointmentDbContext : BaseDbContext
+    internal class PetClinicAppointmentDbContext : DbContext
     {
         private readonly ICurrentUser currentUser;
         private readonly IEventDispatcher eventDispatcher;

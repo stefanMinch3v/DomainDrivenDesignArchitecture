@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetClinic.Application\PetClinic.Application.csproj" />
+    <ProjectReference Include="..\PetClinic.Domain\PetClinic.Domain.csproj" />
+    <ProjectReference Include="..\PetClinic.Infrastructure\PetClinic.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetClinic.Web\PetClinic.Web.csproj" />
+  </ItemGroup>
+
+
+</Project>

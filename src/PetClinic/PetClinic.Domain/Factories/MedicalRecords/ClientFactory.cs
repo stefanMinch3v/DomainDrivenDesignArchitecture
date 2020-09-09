@@ -8,7 +8,6 @@
     {
         private Address address = default!;
         private string name = default!;
-        private Pet pet = default!;
         private PhoneNumber phoneNumber = default!;
 
         private bool isAddressSet = false;
@@ -21,7 +20,7 @@
                 throw new InvalidClientException("PhoneNumber and address must be set");
             }
 
-            return new Client(this.name, this.pet, this.address, this.phoneNumber);
+            return new Client(this.name, this.address, this.phoneNumber);
         }
 
         public IClientFactory WithAddress(Address address)
@@ -39,24 +38,6 @@
             this.name = name;
             return this;
         }
-
-        public IClientFactory WithPet(Pet pet)
-        {
-            this.pet = pet;
-            return this;
-        }
-
-        public IClientFactory WithPet(
-            string name,
-            string breed,
-            int age,
-            bool isCastrated,
-            bool isAdpoted,
-            PetType petType,
-            Color color,
-            Color eyeColor,
-            Address foundAt)
-            => this.WithPet(new Pet(name, breed, age, isCastrated, isAdpoted, petType, color, eyeColor, foundAt));
 
         public IClientFactory WithPhoneNumber(PhoneNumber phoneNumber)
         {

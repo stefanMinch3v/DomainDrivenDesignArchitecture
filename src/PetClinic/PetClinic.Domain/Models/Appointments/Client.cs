@@ -8,15 +8,9 @@
     public class Client : AuditableEntity<int>, IAggregateRoot
     {
         private readonly HashSet<Appointment> appointments;
+        private readonly HashSet<Pet> pets;
 
-        private Client(string name)
-        {
-            this.Name = name;
-            this.Pet = default!;
-            this.appointments = new HashSet<Appointment>();
-        }
-
-        internal Client(string name, Pet pet)
+        internal Client(string name)
         {
             Guard.ForStringLength<InvalidNameException>(
                 name,
@@ -25,14 +19,14 @@
                 nameof(name));
 
             this.Name = name;
-            this.Pet = pet;
             this.appointments = new HashSet<Appointment>();
+            this.pets = new HashSet<Pet>();
         }
 
         public string Name { get; }
 
-        public Pet Pet { get; }
+        public IReadOnlyCollection<Pet> Pets => this.pets.ToList().AsReadOnly();
 
-        public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly(); // ??
+        public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly();
     }
 }
