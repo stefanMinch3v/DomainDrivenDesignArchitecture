@@ -23,7 +23,7 @@
 
         public async Task<Result<IUser>> Register(RegisterUserCommand userInput)
         {
-            var user = new User(userInput.Email, userInput.Name, userInput.PhoneNumber);
+            var user = new User(userInput.Email, userInput.Name);
 
             var identityResult = await this.userManager.CreateAsync(user, userInput.Password);
 
@@ -51,6 +51,17 @@
             var token = this.jwtTokenGenerator.GenerateToken(user);
 
             return new LoginOutputModel(token);
+        }
+
+        public async Task<Result<IUser>> GetById(string id)
+        {
+            var user = await this.userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return "Invalid user.";
+            }
+
+            return user;
         }
     }
 }

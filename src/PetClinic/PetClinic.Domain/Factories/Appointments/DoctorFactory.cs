@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Domain.Factories.Appointments
 {
     using Models.Appointments;
+    using Models.SharedKernel;
 
     internal class DoctorFactory : IDoctorFactory
     {

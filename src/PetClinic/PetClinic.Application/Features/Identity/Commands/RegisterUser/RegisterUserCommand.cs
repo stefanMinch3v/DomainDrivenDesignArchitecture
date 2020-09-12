@@ -6,25 +6,23 @@
 
     public class RegisterUserCommand : UserInputModel, IRequest<Result>
     {
-        public RegisterUserCommand(string email, string password, string name, string phoneNumber)
+        public RegisterUserCommand(
+            string email, 
+            string password, 
+            string name)
             : base(email, password)
         {
             this.Name = name;
-            this.PhoneNumber = phoneNumber;
         }
 
         public string Name { get; }
-
-        public string PhoneNumber { get; }
 
         public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result>
         {
             private readonly IIdentity identity;
 
-            public RegisterUserCommandHandler(IIdentity identity)
-            {
-                this.identity = identity;
-            }
+            public RegisterUserCommandHandler(IIdentity identity) 
+                => this.identity = identity;
 
             public async Task<Result> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
@@ -34,10 +32,6 @@
                 {
                     return result;
                 }
-
-                var user = result.Data;
-
-                // save as client/doctor
 
                 return result;
             }

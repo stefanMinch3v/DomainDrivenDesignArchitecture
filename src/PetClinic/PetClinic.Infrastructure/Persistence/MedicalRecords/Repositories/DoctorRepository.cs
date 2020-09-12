@@ -5,9 +5,9 @@
     using Domain.Models.MedicalRecords;
     using Microsoft.EntityFrameworkCore;
 
-    internal class MedicalRecordRepository : DataRepository<Client>, IMedicalRecordRepository
+    internal class DoctorRepository : DataRepository<Doctor>, IDoctorRepository
     {
-        public MedicalRecordRepository(DbContext context)
+        public DoctorRepository(DbContext context)
             : base(context)
         {
         }

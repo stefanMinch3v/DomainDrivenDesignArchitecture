@@ -1,6 +1,8 @@
-﻿namespace PetClinic.Web.Features
+﻿namespace PetClinic.Web.Features.Identity
 {
     using Application.Features.Identity.Commands.LoginUser;
+    using Application.Features.Identity.Commands.RegisterClient;
+    using Application.Features.Identity.Commands.RegisterDoctor;
     using Application.Features.Identity.Commands.RegisterUser;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,16 @@
         public async Task<ActionResult<LoginOutputModel>> Login(LoginUserCommand command)
             => await this.Send(command);
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
-        public IActionResult Get()
-        {
-            return this.Ok(this.User.Identity.Name);
-        }
+        [Route(nameof(RegisterClient))]
+        public async Task<ActionResult> RegisterClient(RegisterClientCommand command)
+            => await this.Send(command);
+
+        [HttpPost]
+        [Authorize]
+        [Route(nameof(RegisterDoctor))]
+        public async Task<ActionResult> RegisterDoctor(RegisterDoctorCommand command)
+            => await this.Send(command);
     }
 }

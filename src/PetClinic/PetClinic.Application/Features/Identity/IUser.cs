@@ -2,5 +2,8 @@
 {
     public interface IUser
     {
+        void BecomeDoctor(int id);
+
+        void BecomeClient(int id);
     }
 }

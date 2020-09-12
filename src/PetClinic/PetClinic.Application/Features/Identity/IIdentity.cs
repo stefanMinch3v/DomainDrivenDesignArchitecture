@@ -9,5 +9,7 @@
         Task<Result<IUser>> Register(RegisterUserCommand input);
 
         Task<Result<LoginOutputModel>> Login(LoginUserCommand input);
+
+        Task<Result<IUser>> GetById(string id);
     }
 }

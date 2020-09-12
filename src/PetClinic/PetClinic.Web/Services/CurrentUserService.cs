@@ -17,8 +17,11 @@
             }
 
             this.UserId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            this.UserName = user.FindFirstValue(ClaimTypes.Name);
         }
 
         public string UserId { get; }
+
+        public string UserName { get; }
     }
 }
