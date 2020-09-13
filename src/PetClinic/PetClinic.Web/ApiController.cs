@@ -3,11 +3,13 @@
     using Application;
     using Common;
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
     using System.Threading.Tasks;
 
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public abstract class ApiController : ControllerBase
     {

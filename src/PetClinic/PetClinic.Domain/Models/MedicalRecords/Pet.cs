@@ -3,12 +3,13 @@
     using Common;
     using Exceptions;
     using SharedKernel;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public class Pet : AuditableEntity<int>
     {
-        private readonly HashSet<string> diagnoses;
+        private readonly HashSet<PetStatus> petStatusData;
 
         private Pet(
             string name,
@@ -26,7 +27,7 @@
             this.PetType = null!;
             this.EyeColor = null!;
             this.FoundAt = null!;
-            this.diagnoses = new HashSet<string>();
+            this.petStatusData = new HashSet<PetStatus>();
         }
 
         internal Pet(
@@ -61,7 +62,7 @@
             this.Color = color;
             this.EyeColor = eyeColor;
             this.FoundAt = foundAt;
-            this.diagnoses = new HashSet<string>();
+            this.petStatusData = new HashSet<PetStatus>();
         }
 
         public PetType PetType { get; }
@@ -82,6 +83,12 @@
 
         public Address FoundAt { get; }
 
-        public IReadOnlyCollection<string> Diagnoses => this.diagnoses.ToList().AsReadOnly(); 
+        public IReadOnlyCollection<PetStatus> PetStatusData => this.petStatusData.ToList().AsReadOnly();
+
+        public void AddDiagnose(bool isSick, DateTime date, string? diagnose = null)
+        {
+            var petStatus = new PetStatus(isSick, date, diagnose);
+            this.petStatusData.Add(petStatus);
+        }
     }
 }
