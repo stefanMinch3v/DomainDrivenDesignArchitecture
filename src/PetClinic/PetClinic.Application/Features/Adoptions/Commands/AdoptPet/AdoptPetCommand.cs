@@ -55,6 +55,7 @@
                 }
 
                 pet.AddToOwner(clientId.Value);
+                await this.adoptionRepository.Save(pet);
 
                 return Result.Success;
             }
