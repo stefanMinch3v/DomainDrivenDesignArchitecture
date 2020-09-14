@@ -18,4 +18,8 @@
     <ProjectReference Include="..\PetClinic.Domain\PetClinic.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Adoptions\Queries\" />
+  </ItemGroup>
+
 </Project>

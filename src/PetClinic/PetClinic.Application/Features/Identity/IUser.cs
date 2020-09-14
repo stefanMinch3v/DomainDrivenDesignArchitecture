@@ -5,5 +5,9 @@
         void BecomeDoctor(int id);
 
         void BecomeClient(int id);
+
+        int? GetClientId();
+
+        int? GetDoctorId();
     }
 }
