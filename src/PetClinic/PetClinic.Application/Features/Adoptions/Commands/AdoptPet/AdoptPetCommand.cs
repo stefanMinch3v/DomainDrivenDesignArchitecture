@@ -20,32 +20,27 @@
         {
             private readonly ICurrentUser currentUser;
             private readonly IAdoptionRepository adoptionRepository;
+            private readonly MedicalRecords.IClientRepository clientRepository;
             private readonly IIdentity identity;
 
             public AdoptPetCommandHandler(
                 ICurrentUser currentUser,
                 IAdoptionRepository adoptionRepository,
-                IIdentity identity)
+                IIdentity identity,
+                MedicalRecords.IClientRepository clientRepository)
             {
                 this.currentUser = currentUser;
                 this.adoptionRepository = adoptionRepository;
                 this.identity = identity;
+                this.clientRepository = clientRepository;
             }
 
             public async Task<Result> Handle(AdoptPetCommand request, CancellationToken cancellationToken)
             {
-                var currentUserId = this.currentUser.UserId;
-
-                var result = await this.identity.GetById(currentUserId);
+                var result = await this.identity.IsInRoleClient(this.currentUser.UserId);
                 if (!result.Succeeded)
                 {
                     return result;
-                }
-
-                var clientId = result.Data.GetClientId();
-                if (clientId is null)
-                {
-                    return "Invaid user.";
                 }
 
                 var pet = await this.adoptionRepository.GetPet(request.PetId);
@@ -54,7 +49,14 @@
                     return "Invalid pet.";
                 }
 
-                pet.AddToOwner(clientId.Value);
+                var clientId = await this.clientRepository.GetIdByUser(this.currentUser.UserId);
+                if (clientId == 0)
+                {
+                    return "User is no longer member of the clinic.";
+                }
+
+                pet.AddToOwner(clientId);
+
                 await this.adoptionRepository.Save(pet);
 
                 return Result.Success;

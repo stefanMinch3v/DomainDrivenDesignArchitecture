@@ -28,41 +28,48 @@
             private readonly IIdentity identity;
             private readonly Domain.Factories.MedicalRecords.IDoctorFactory doctorFactory;
             private readonly MedicalRecords.IDoctorRepository doctorRepository;
+            private readonly MedicalRecords.IClientRepository clientRepository;
 
             public RegisterDoctorCommandHandler(
                 ICurrentUser currentUser,
                 IIdentity identity,
                 Domain.Factories.MedicalRecords.IDoctorFactory doctorFactory,
-                MedicalRecords.IDoctorRepository doctorRepository)
+                MedicalRecords.IDoctorRepository doctorRepository,
+                MedicalRecords.IClientRepository clientRepository)
             {
                 this.currentUser = currentUser;
                 this.identity = identity;
                 this.doctorFactory = doctorFactory;
                 this.doctorRepository = doctorRepository;
+                this.clientRepository = clientRepository;
             }
 
             public async Task<Result> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
             {
-                var result = await this.identity.GetById(this.currentUser.UserId);
-                if (!result.Succeeded)
+                var existingClientTask = this.clientRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
+                var existingDoctorTask = this.doctorRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
+
+                await Task.WhenAll(existingClientTask, existingDoctorTask);
+
+                var existingClientResult = await existingClientTask;
+                var existingDoctorResult = await existingDoctorTask;
+
+                if (existingClientResult || existingDoctorResult)
                 {
-                    return result;
+                    return "There is already an existing member with this account!";
                 }
 
-                var user = result.Data;
-
                 var doctor = this.doctorFactory
-                    .WithDoctorType(Enumeration.FromValue<DoctorType>(request.DoctorType))
                     .WithName(this.currentUser.UserName)
+                    .WithUserId(this.currentUser.UserId)
+                    .WithDoctorType(Enumeration.FromValue<DoctorType>(request.DoctorType))
                     .WithPhoneNumber(request.PhoneNumber)
                     .WithAddress(request.Address)
                     .Build();
 
-                user.BecomeDoctor(doctor.Id);
-
                 await this.doctorRepository.Save(doctor, cancellationToken);
 
-                return result;
+                return Result.Success;
             }
         }
     }

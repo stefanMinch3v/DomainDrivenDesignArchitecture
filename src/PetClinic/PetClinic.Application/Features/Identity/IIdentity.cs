@@ -6,10 +6,16 @@
 
     public interface IIdentity
     {
-        Task<Result<IUser>> Register(RegisterUserCommand input);
+        Task<Result> Register(RegisterUserCommand input);
 
         Task<Result<LoginOutputModel>> Login(LoginUserCommand input);
 
-        Task<Result<IUser>> GetById(string id);
+        Task<Result> AddToRoleClient(string userId);
+
+        Task<Result> AddToRoleDoctor(string userId);
+
+        Task<Result> IsInRoleDoctor(string userId);
+
+        Task<Result> IsInRoleClient(string userId);
     }
 }
