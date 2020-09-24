@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Web
 {
-    using Application;
+    using Application.Common;
     using Common;
     using MediatR;
     using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Web.Services
 {
-    using Application.Contracts;
+    using Application.Common.Contracts;
     using Microsoft.AspNetCore.Http;
     using System;
     using System.Security.Claims;

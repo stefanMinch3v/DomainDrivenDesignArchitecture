@@ -1,7 +1,7 @@
 ﻿namespace PetClinic.Web.Middlewares
 {
-    using Application.Exceptions;
-    using Domain.Exceptions;
+    using Application.Common.Exceptions;
+    using Domain.Common;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;

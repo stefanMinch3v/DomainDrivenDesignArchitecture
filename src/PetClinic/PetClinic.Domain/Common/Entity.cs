@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain.Common
 {
-    using Events;
+    using Common;
     using System.Collections.Generic;
     using System.Linq;
 

@@ -1,7 +1,6 @@
 ﻿namespace PetClinic.Domain.Common
 {
     using System.Collections.Generic;
-    using Events;
 
     public interface IEntity
     {

@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain
 {
-    using Factories;
+    using Common;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class DomainConfiguration

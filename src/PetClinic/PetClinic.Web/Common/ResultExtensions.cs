@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Web.Common
 {
-    using Application;
+    using Application.Common;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 

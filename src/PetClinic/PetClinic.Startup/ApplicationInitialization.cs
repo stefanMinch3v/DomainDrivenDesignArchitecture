@@ -3,6 +3,7 @@
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
+    using PetClinic.Infrastructure.Common;
 
     public static class ApplicationInitialization
     {

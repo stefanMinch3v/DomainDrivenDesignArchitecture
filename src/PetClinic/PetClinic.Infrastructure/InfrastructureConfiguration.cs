@@ -1,19 +1,22 @@
 ﻿namespace PetClinic.Infrastructure
 {
-    using Application.Contracts;
-    using Identity;
+    using Application.Common;
+    using Application.Common.Contracts;
+    using Application.Identity;
+    using Infrastructure.Common;
+    using Infrastructure.Common.Events;
+    using Infrastructure.Common.Persistence;
+    using Infrastructure.Persistence.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
-    using System.Text;
     using Persistence.Adoptions;
     using Persistence.Appointments;
     using Persistence.MedicalRecords;
-    using PetClinic.Application;
-    using PetClinic.Application.Features.Identity;
+    using System.Text;
 
     public static class InfrastructureConfiguration
     {
@@ -23,19 +26,18 @@
             => services
                 .AddDatabase(configuration)
                 .AddRepositories()
-                .AddIdentity(configuration);
+                .AddIdentity(configuration)
+                .AddTransient<IEventDispatcher, EventDispatcher>();
 
         private static IServiceCollection AddDatabase(
             this IServiceCollection services,
             IConfiguration configuration)
             => services
-                .AddDbContext<DbContext>(options => options
+                .AddDbContext<PetClinicDbContext>(options => options
                     .UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly(typeof(DbContext).Assembly.FullName)))
-                .AddTransient<IInitializer, PetClinicAdoptionDbInitializer>()
-                .AddTransient<IInitializer, PetClinicAppointmentDbInitializer>()
-                .AddTransient<IInitializer, PetClinicMedicalRecordsDbInitializer>();
+                        b => b.MigrationsAssembly(typeof(PetClinicDbContext).Assembly.FullName)))
+                .AddTransient<IInitializer, DatabaseInitializer>();
 
         internal static IServiceCollection AddRepositories(this IServiceCollection services)
             => services
@@ -53,12 +55,13 @@
             services
                 .AddIdentity<User, IdentityRole>(options =>
                 {
-                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredLength = 5;
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DbContext>();
 
             var secret = configuration

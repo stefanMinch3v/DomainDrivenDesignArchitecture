@@ -1,7 +1,8 @@
 ﻿namespace PetClinic.Application
 {
-    using Application.Behaviours;
     using AutoMapper;
+    using Common;
+    using Common.Behaviours;
     using MediatR;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,18 @@
                 .Configure<ApplicationSettings>(
                     configuration.GetSection(nameof(ApplicationSettings)),
                     options => options.BindNonPublicProperties = true)
-                //.AddAutoMapper(Assembly.GetExecutingAssembly())
+                .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddMediatR(Assembly.GetExecutingAssembly())
+                .AddEventHandlers()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
+        private static IServiceCollection AddEventHandlers(this IServiceCollection services)
+            => services
+                .Scan(scan => scan
+                    .FromCallingAssembly()
+                    .AddClasses(classes => classes
+                        .AssignableTo(typeof(IEventHandler<>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime());
     }
 }

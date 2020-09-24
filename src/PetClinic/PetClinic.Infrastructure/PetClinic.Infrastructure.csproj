@@ -35,11 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\Adoptions\Migrations\" />
-    <Folder Include="Persistence\Adoptions\Configurations\" />
-    <Folder Include="Persistence\Appointments\Configurations\" />
-    <Folder Include="Persistence\Appointments\Migrations\" />
-    <Folder Include="Persistence\MedicalRecords\Configurations\" />
-    <Folder Include="Persistence\MedicalRecords\Migrations\" />
+    <Folder Include="Common\Persistence\Migrations\" />
+    <Folder Include="Common\Persistence\Configurations\" />
   </ItemGroup>
 </Project>
