@@ -1,6 +1,5 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Identity
 {
-    using Application;
     using Application.Common;
     using Application.Identity;
     using Application.Identity.Commands.LoginUser;

@@ -6,14 +6,13 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal abstract class DataRepository<TDbContext, TEntity> : IRepository<TEntity>
-        where TDbContext : IDbContext
+    internal abstract class DataRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IAggregateRoot
     {
-        protected DataRepository(TDbContext context)
+        protected DataRepository(PetClinicDbContext context)
             => this.Data = context;
 
-        protected TDbContext Data { get; }
+        protected PetClinicDbContext Data { get; }
 
         protected IQueryable<TEntity> All()
             => this.Data.Set<TEntity>();

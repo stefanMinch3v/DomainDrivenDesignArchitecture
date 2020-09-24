@@ -12,7 +12,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class PetClinicDbContext : IdentityDbContext<User>
+    public class PetClinicDbContext : IdentityDbContext<User>
     {
         private readonly IEventDispatcher eventDispatcher;
         private readonly Stack<object> savesChangesTracker;
@@ -36,6 +36,8 @@
         public DbSet<OfficeRoom> OfficeRooms { get; set; } = default!;
 
         public DbSet<Doctor> Doctors { get; set; } = default!;
+
+        public DbSet<PetStatus> PetStatus { get; set; } = default!;
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -12,11 +12,11 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class DoctorRepository : DataRepository<IMedicalRecordDbContext, Doctor>, IDoctorRepository
+    internal class DoctorRepository : DataRepository<Doctor>, IDoctorRepository
     {
         private readonly IMapper mapper;
 
-        public DoctorRepository(IMedicalRecordDbContext context, IMapper mapper)
+        public DoctorRepository(PetClinicDbContext context, IMapper mapper)
             : base(context) 
             => this.mapper = mapper;
 

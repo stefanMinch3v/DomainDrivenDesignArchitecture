@@ -12,11 +12,11 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class AdoptionRepository : DataRepository<IAdoptionDbContext, Pet>, IAdoptionRepository
+    internal class AdoptionRepository : DataRepository<Pet>, IAdoptionRepository
     {
         private readonly IMapper mapper;
 
-        public AdoptionRepository(IAdoptionDbContext context, IMapper mapper)
+        public AdoptionRepository(PetClinicDbContext context, IMapper mapper)
             : base(context) 
             => this.mapper = mapper;
 

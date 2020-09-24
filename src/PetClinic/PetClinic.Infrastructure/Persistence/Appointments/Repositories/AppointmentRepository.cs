@@ -10,9 +10,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class AppointmentRepository : DataRepository<IAppointmentDbContext, Appointment>, IAppointmentRepository
+    internal class AppointmentRepository : DataRepository<Appointment>, IAppointmentRepository
     {
-        public AppointmentRepository(IAppointmentDbContext context)
+        public AppointmentRepository(PetClinicDbContext context)
             : base(context)
         {
         }

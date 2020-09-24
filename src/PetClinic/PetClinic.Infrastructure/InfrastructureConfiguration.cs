@@ -13,9 +13,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
-    using Persistence.Adoptions;
-    using Persistence.Appointments;
-    using Persistence.MedicalRecords;
     using System.Text;
 
     public static class InfrastructureConfiguration

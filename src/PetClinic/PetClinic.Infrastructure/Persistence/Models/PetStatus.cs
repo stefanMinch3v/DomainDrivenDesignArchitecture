@@ -5,6 +5,8 @@
 
     public class PetStatus : BaseDbEntity<int>
     {
+        public int PetId { get; set; }
+
         public bool IsSick { get; set; }
 
         public DateTime Date { get; set; }
