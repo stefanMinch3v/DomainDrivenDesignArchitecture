@@ -1,9 +1,9 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence
 {
     using Domain.Common;
-    using Infrastructure.Common.Events;
-    using Infrastructure.Persistence.Identity;
-    using Infrastructure.Persistence.Models;
+    using PetClinic.Infrastructure.Common.Events;
+    using PetClinic.Infrastructure.Persistence.Identity;
+    using PetClinic.Infrastructure.Persistence.Models;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;

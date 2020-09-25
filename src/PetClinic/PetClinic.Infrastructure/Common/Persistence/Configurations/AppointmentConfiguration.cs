@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence.Configurations
 {
-    using Infrastructure.Persistence.Models;
+    using PetClinic.Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,17 +22,19 @@
             builder
                 .HasOne(a => a.Client)
                 .WithMany(c => c.Appointments)
+                .HasForeignKey(a => a.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(a => a.Doctor)
                 .WithMany(c => c.Appointments)
+                .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(a => a.OfficeRoom)
                 .WithOne()
-                .HasForeignKey("AppointmentId")
+                .HasForeignKey(nameof(OfficeRoom), "AppointmentId")
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

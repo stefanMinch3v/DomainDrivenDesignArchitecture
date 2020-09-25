@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence.Configurations
 {
-    using Infrastructure.Persistence.Models;
+    using PetClinic.Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

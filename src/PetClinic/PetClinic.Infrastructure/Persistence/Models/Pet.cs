@@ -23,7 +23,7 @@
 
         public bool IsAdopted { get; set; }
 
-        public string? ClientId { get; set; }
+        public string? UserId { get; set; } = default!;
 
         public ICollection<PetStatus> PetStatusData { get; set; } = new HashSet<PetStatus>();
     }

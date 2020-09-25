@@ -3,10 +3,10 @@
     using Application.Common;
     using Application.Common.Contracts;
     using Application.Identity;
-    using Infrastructure.Common;
-    using Infrastructure.Common.Events;
-    using Infrastructure.Common.Persistence;
-    using Infrastructure.Persistence.Identity;
+    using PetClinic.Infrastructure.Common;
+    using PetClinic.Infrastructure.Common.Events;
+    using PetClinic.Infrastructure.Common.Persistence;
+    using PetClinic.Infrastructure.Persistence.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -36,7 +36,7 @@
                         b => b.MigrationsAssembly(typeof(PetClinicDbContext).Assembly.FullName)))
                 .AddTransient<IInitializer, DatabaseInitializer>();
 
-        internal static IServiceCollection AddRepositories(this IServiceCollection services)
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
             => services
                 .Scan(scan => scan
                     .FromCallingAssembly()
@@ -59,7 +59,7 @@
                     options.Password.RequireUppercase = false;
                 })
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<DbContext>();
+                .AddEntityFrameworkStores<PetClinicDbContext>();
 
             var secret = configuration
                 .GetSection(nameof(ApplicationSettings))

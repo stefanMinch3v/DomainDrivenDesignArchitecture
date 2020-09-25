@@ -21,6 +21,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Common\Persistence\Migrations\20200925180343_InitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925180343_InitialDatabase.Designer.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181041_InitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181041_InitialDatabase.Designer.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181411_InitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181411_InitialDatabase.Designer.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181832_InitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200925181832_InitialDatabase.Designer.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
@@ -35,9 +46,5 @@
   <ItemGroup>
     <ProjectReference Include="..\PetClinic.Application\PetClinic.Application.csproj" />
     <ProjectReference Include="..\PetClinic.Domain\PetClinic.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Persistence\Migrations\" />
   </ItemGroup>
 </Project>

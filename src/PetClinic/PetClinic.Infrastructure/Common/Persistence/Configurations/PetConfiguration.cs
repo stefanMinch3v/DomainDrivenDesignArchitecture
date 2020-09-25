@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence.Configurations
 {
-    using Infrastructure.Persistence.Models;
+    using PetClinic.Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -46,6 +46,10 @@
             builder
                 .Property(p => p.PetType)
                 .IsRequired();
+
+            builder
+                .Property(p => p.UserId)
+                .IsRequired(false);
 
             builder
                 .HasMany(p => p.PetStatusData)
