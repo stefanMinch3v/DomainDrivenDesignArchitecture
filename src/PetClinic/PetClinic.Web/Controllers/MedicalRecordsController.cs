@@ -12,22 +12,27 @@
     public class MedicalRecordsController : ApiController
     {
         [HttpGet]
+        [Route(nameof(ClientDetails))]
         public async Task<ActionResult<ClientDetailsOutputModel>> ClientDetails(int id)
             => await base.Send(new ClientDetailsQuery(id));
 
-        [HttpGet] 
+        [HttpGet]
+        [Route(nameof(DoctorDetails))]
         public async Task<ActionResult<DoctorDetailsOutputModel>> DoctorDetails(int id)
              => await base.Send(new DoctorDetailsQuery(id));
 
         [HttpGet]
+        [Route(nameof(AllClients))]
         public async Task<ActionResult<IReadOnlyList<ClientListingsOutputModel>>> AllClients()
             => await base.Send(new AllClientsQuery());
 
         [HttpGet]
+        [Route(nameof(AllDoctors))]
         public async Task<ActionResult<IReadOnlyList<DoctorListingsOutputModel>>> AllDoctors()
             => await base.Send(new AllDoctorsQuery());
 
         [HttpPost]
+        [Route(nameof(AddDiagnose))]
         public async Task<ActionResult> AddDiagnose(AddDiagnoseCommand command)
             => await base.Send(command);
     }
