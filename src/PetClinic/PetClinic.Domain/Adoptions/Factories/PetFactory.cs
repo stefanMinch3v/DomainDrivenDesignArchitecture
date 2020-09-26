@@ -2,6 +2,7 @@
 {
     using Common.SharedKernel;
     using Models;
+    using System;
 
     internal class PetFactory : IPetFactory
     {
@@ -13,9 +14,12 @@
         private Address foundAt = default!;
         private string name = default!;
         private PetType petType = default!;
+        private string createdBy = default!;
+        private DateTime createdOn = default!;
 
         public Pet Build()
-            => new Pet(
+        {
+            var pet = new Pet(
                 this.name,
                 this.breed,
                 this.age,
@@ -24,6 +28,15 @@
                 this.color,
                 this.eyeColor,
                 this.foundAt);
+
+            if (!string.IsNullOrEmpty(this.createdBy) && this.createdOn != default)
+            {
+                pet.CreatedBy = this.createdBy;
+                pet.CreatedOn = this.createdOn;
+            }
+
+            return pet;
+        }
 
         public IPetFactory WithAge(int age)
         {
@@ -67,6 +80,14 @@
         public IPetFactory WithName(string name)
         {
             this.name = name;
+            return this;
+        }
+
+        public IPetFactory WithOptionalCreatedByOn(string createdBy, DateTime createdOn)
+        {
+            this.createdBy = createdBy;
+            this.createdOn = createdOn;
+
             return this;
         }
 

@@ -1,6 +1,5 @@
 ﻿namespace PetClinic.Domain.Common
 {
-    using Common;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -14,7 +13,7 @@
             this.events = new List<IDomainEvent>();
         }
 
-        public TKey Id { get; private set; } = default;
+        public TKey Id { get; set; } = default;
 
         public IReadOnlyCollection<IDomainEvent> Events => this.events.ToList();
 

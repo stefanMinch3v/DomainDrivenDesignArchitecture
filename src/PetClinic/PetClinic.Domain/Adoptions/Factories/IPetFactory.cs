@@ -1,8 +1,9 @@
 ﻿namespace PetClinic.Domain.Adoptions.Factories
 {
     using Common.SharedKernel;
+    using Domain.Common;
     using Models;
-    using PetClinic.Domain.Common;
+    using System;
 
     public interface IPetFactory : IFactory<Pet>
     {
@@ -23,5 +24,7 @@
         IPetFactory WithFoundAt(Address foundAt);
 
         IPetFactory WithFoundAt(string foundAt);
+
+        IPetFactory WithOptionalCreatedByOn(string createdBy, DateTime createdOn);
     }
 }

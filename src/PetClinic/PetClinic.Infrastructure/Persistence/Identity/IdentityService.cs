@@ -6,7 +6,9 @@
     using Application.Identity.Commands.RegisterUser;
     using Common;
     using Microsoft.AspNetCore.Identity;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     internal class IdentityService : IIdentity
@@ -49,7 +51,18 @@
                 return InvalidLoginErrorMessage;
             }
 
-            var token = jwtTokenGenerator.GenerateToken(user);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+            var claimRoles = new List<Claim>();
+
+            if (userRoles.Any())
+            {
+                foreach (var roleName in userRoles)
+                {
+                    claimRoles.Add(new Claim(ClaimTypes.Role, roleName));
+                }
+            }
+
+            var token = jwtTokenGenerator.GenerateToken(user, claimRoles);
 
             return new LoginOutputModel(token);
         }

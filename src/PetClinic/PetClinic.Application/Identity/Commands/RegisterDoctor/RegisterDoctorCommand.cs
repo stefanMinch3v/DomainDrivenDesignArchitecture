@@ -70,7 +70,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
-                await this.doctorRepository.Save(doctor, cancellationToken);
+                await this.doctorRepository.Save(doctor, cancellationToken: cancellationToken);
                 await this.identity.AddToRoleDoctor(this.currentUser.UserId);
 
                 return Result.Success;

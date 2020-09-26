@@ -1,9 +1,9 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    using Common.Persistence.Models;
+    using Domain.Common;
     using System;
 
-    public class Appointment : BaseDbEntity<int>
+    public class Appointment : AuditableEntity<int>
     {
         public int DoctorId { get; set; }
         public Doctor Doctor { get; set; } = default!;

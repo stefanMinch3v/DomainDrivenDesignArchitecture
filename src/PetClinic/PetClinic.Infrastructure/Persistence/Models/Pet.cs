@@ -1,9 +1,9 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    using Common.Persistence.Models;
+    using Domain.Common;
     using System.Collections.Generic;
 
-    public class Pet : BaseDbEntity<int>
+    public class Pet : AuditableEntity<int>, IAggregateRoot
     {
         public PetType PetType { get; set; }
 
@@ -17,7 +17,7 @@
 
         public string FoundAt { get; set; } = default!;
 
-        public int Age { get; }
+        public int Age { get; set; }
 
         public bool IsCastrated { get; set; }
 

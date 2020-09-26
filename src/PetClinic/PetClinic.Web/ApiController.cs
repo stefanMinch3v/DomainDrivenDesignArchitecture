@@ -9,8 +9,8 @@
     using System.Threading.Tasks;
 
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
+    [Authorize]
     public abstract class ApiController : ControllerBase
     {
         private IMediator? mediator;

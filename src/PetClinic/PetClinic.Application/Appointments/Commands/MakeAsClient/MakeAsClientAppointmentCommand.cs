@@ -38,6 +38,12 @@
 
             public async Task<Result> Handle(MakeAsClientAppointmentCommand request, CancellationToken cancellationToken)
             {
+                var isClient = this.currentUser.Role == ApplicationConstants.Roles.Client;
+                if (!isClient)
+                {
+                    return ApplicationConstants.InvalidMessages.Client;
+                }
+
                 // check if any existing with the current date and if room is available here
                 var isDateAvailable = await this.appointmentRepository.IsDateAvailable(
                     request.UserIdDoctor,
@@ -65,7 +71,7 @@
                     .WithAppointmentDate(request.StartDate, request.EndDate)
                     .Build();
 
-                await this.appointmentRepository.Save(appointment, cancellationToken);
+                await this.appointmentRepository.Save(appointment, cancellationToken: cancellationToken);
 
                 return Result.Success;
             }

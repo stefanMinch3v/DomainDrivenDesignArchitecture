@@ -63,11 +63,11 @@
 
         public bool IsCastrated { get; }
 
-        public string? ClientId { get; private set; }
+        public string? UserId { get; private set; }
 
         public void AddToOwner(string ownerId)
         {
-            this.ClientId = ownerId;
+            this.UserId = ownerId;
             // send message to medical records with current pet data so it will be attached to the owner
         }
     }

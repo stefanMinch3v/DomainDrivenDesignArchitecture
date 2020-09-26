@@ -3,6 +3,7 @@ namespace PetClinic.Startup
     using Application;
     using Domain;
     using Infrastructure;
+    using Infrastructure.Common.Persistence;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -41,7 +42,8 @@ namespace PetClinic.Startup
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapControllers())
-                .Initialize();
+                .Initialize()
+                .AddDefaultRoles();
         }
     }
 }

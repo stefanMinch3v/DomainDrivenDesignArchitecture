@@ -1,9 +1,9 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    using Common.Persistence.Models;
+    using Domain.Common;
     using System;
 
-    public class PetStatus : BaseDbEntity<int>
+    public class PetStatus : AuditableEntity<int>
     {
         public int PetId { get; set; }
 

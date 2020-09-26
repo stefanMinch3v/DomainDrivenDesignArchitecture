@@ -64,7 +64,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
-                await this.clientRepository.Save(client, cancellationToken);
+                await this.clientRepository.Save(client, cancellationToken: cancellationToken);
                 await this.identity.AddToRoleClient(this.currentUser.UserId);
 
                 return Result.Success;

@@ -2,7 +2,6 @@
 {
     using Application.Common.Contracts;
     using Microsoft.AspNetCore.Http;
-    using System;
     using System.Security.Claims;
 
     public class CurrentUserService : ICurrentUser
@@ -11,17 +10,15 @@
         {
             var user = httpContextAccessor.HttpContext?.User;
 
-            if (user == null)
-            {
-                throw new InvalidOperationException("No authenticated user for the current request.");
-            }
-
-            this.UserId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            this.UserName = user.FindFirstValue(ClaimTypes.Name);
+            this.UserId = user?.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            this.UserName = user?.FindFirstValue(ClaimTypes.Name)!;
+            this.Role = user?.FindFirstValue(ClaimTypes.Role)!;
         }
 
         public string UserId { get; }
 
         public string UserName { get; }
+
+        public string Role { get; }
     }
 }

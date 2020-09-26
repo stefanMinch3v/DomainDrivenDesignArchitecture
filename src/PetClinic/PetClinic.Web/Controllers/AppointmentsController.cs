@@ -17,12 +17,10 @@
             => await base.Send(new GetAllAppointmentsQuery());
 
         [HttpPost]
-        [Authorize(Roles = WebConstants.Roles.Client)]
         public async Task<ActionResult> MakeAsClient(MakeAsClientAppointmentCommand command)
             => await base.Send(command);
 
         [HttpPost]
-        [Authorize(Roles = WebConstants.Roles.Doctor)]
         public async Task<ActionResult> MakeAsDoctor(MakeAsDoctorAppointmentCommand command)
             => await base.Send(command);
 

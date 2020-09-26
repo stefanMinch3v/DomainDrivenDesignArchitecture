@@ -11,19 +11,25 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using Application.Common.Contracts;
 
     public class PetClinicDbContext : IdentityDbContext<User>
     {
         private readonly IEventDispatcher eventDispatcher;
+        private readonly ICurrentUser currentUserService;
+        private readonly IDateTime dateTime;
         private readonly Stack<object> savesChangesTracker;
 
         public PetClinicDbContext(
             DbContextOptions<PetClinicDbContext> options,
-            IEventDispatcher eventDispatcher)
+            IEventDispatcher eventDispatcher,
+            ICurrentUser currentUserService,
+            IDateTime dateTime)
             : base(options)
         {
             this.eventDispatcher = eventDispatcher;
-
+            this.currentUserService = currentUserService;
+            this.dateTime = dateTime;
             this.savesChangesTracker = new Stack<object>();
         }
 
@@ -67,6 +73,21 @@
 
             if (!this.savesChangesTracker.Any())
             {
+                foreach (var entry in this.ChangeTracker.Entries<IAuditableEntity>())
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entry.Entity.CreatedBy ??= this.currentUserService.UserId;
+                            entry.Entity.CreatedOn = this.dateTime.Now;
+                            break;
+                        case EntityState.Modified:
+                            entry.Entity.ModifiedBy = this.currentUserService.UserId;
+                            entry.Entity.ModifiedOn = this.dateTime.Now;
+                            break;
+                    }
+                }
+
                 return await base.SaveChangesAsync(cancellationToken);
             }
 

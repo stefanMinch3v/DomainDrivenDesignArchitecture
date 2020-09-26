@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Reflection;
 
+    // this works for domain models initialization
     internal class DatabaseInitializer : IInitializer
     {
         private readonly PetClinicDbContext db;

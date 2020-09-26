@@ -1,9 +1,9 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    using Common.Persistence.Models;
+    using Domain.Common;
     using System.Collections.Generic;
 
-    public class Client : BaseDbEntity<int>
+    public class Client : AuditableEntity<int>
     {
         public string UserId { get; set; } = default!;
 

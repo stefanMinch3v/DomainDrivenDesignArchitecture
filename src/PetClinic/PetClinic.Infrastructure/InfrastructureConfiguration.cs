@@ -3,16 +3,18 @@
     using Application.Common;
     using Application.Common.Contracts;
     using Application.Identity;
-    using PetClinic.Infrastructure.Common;
-    using PetClinic.Infrastructure.Common.Events;
-    using PetClinic.Infrastructure.Common.Persistence;
-    using PetClinic.Infrastructure.Persistence.Identity;
+    using AutoMapper;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using PetClinic.Domain.Common;
+    using PetClinic.Infrastructure.Common;
+    using PetClinic.Infrastructure.Common.Events;
+    using PetClinic.Infrastructure.Common.Persistence;
+    using PetClinic.Infrastructure.Persistence.Identity;
     using System.Text;
 
     public static class InfrastructureConfiguration
@@ -24,7 +26,10 @@
                 .AddDatabase(configuration)
                 .AddRepositories()
                 .AddIdentity(configuration)
-                .AddTransient<IEventDispatcher, EventDispatcher>();
+                .AddAutoMapper(typeof(AutoMapperConfig))
+                .AddInitialData()
+                .AddTransient<IEventDispatcher, EventDispatcher>()
+                .AddTransient<IDateTime, DateTimeService>();
 
         private static IServiceCollection AddDatabase(
             this IServiceCollection services,
@@ -58,7 +63,6 @@
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<PetClinicDbContext>();
 
             var secret = configuration
@@ -91,5 +95,14 @@
 
             return services;
         }
+
+        private static IServiceCollection AddInitialData(this IServiceCollection services)
+            => services
+                .Scan(scan => scan
+                    .FromCallingAssembly()
+                    .AddClasses(classes => classes
+                        .AssignableTo(typeof(IInitialData)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime());
     }
 }

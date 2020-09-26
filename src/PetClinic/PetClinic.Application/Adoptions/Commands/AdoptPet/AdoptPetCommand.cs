@@ -31,15 +31,21 @@
 
             public async Task<Result> Handle(AdoptPetCommand request, CancellationToken cancellationToken)
             {
-                var pet = await this.adoptionRepository.GetPet(request.PetId);
+                var isClient = this.currentUser.Role == ApplicationConstants.Roles.Client;
+                if (!isClient)
+                {
+                    return ApplicationConstants.InvalidMessages.Client;
+                }
+
+                var pet = await this.adoptionRepository.GetPet(request.PetId, cancellationToken);
                 if (pet is null)
                 {
-                    return "Invalid pet.";
+                    return ApplicationConstants.InvalidMessages.Pet;
                 }
 
                 pet.AddToOwner(this.currentUser.UserId);
 
-                await this.adoptionRepository.Save(pet);
+                await this.adoptionRepository.Save(pet, request.PetId, cancellationToken);
 
                 return Result.Success;
             }

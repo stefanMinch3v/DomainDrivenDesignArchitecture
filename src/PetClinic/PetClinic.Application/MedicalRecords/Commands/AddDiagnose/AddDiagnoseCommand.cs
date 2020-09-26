@@ -32,18 +32,18 @@
                 var client = await this.clientRepository.Single(request.ClientId);
                 if (client is null)
                 {
-                    throw new ArgumentNullException("Invalid client.");
+                    throw new ArgumentNullException(ApplicationConstants.InvalidMessages.Client);
                 }
 
                 var currentPet = client.Pets.FirstOrDefault(p => p.Id == request.PetId);
                 if (currentPet is null)
                 {
-                    throw new ArgumentNullException("Invalid pet.");
+                    throw new ArgumentNullException(ApplicationConstants.InvalidMessages.Pet);
                 }
 
                 currentPet.AddDiagnose(request.IsSick, request.Date, request.Diagnose);
 
-                await clientRepository.Save(client, cancellationToken);
+                await clientRepository.Save(client, request.ClientId, cancellationToken);
 
                 return Result.Success;
             }

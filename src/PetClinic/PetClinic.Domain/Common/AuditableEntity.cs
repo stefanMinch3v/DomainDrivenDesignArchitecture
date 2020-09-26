@@ -18,7 +18,7 @@
 
         public DateTime CreatedOn { get; set; }
 
-        public string ModifiedBy
+        public string? ModifiedBy
         {
             get => this.modifiedBy;
             set => this.modifiedBy = value ?? throw new InvalidEntityException(UserErrorMsg);
