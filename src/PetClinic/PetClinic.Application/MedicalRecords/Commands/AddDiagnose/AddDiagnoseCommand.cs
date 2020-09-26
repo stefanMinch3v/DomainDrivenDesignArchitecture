@@ -43,7 +43,7 @@
 
                 currentPet.AddDiagnose(request.IsSick, request.Date, request.Diagnose);
 
-                await clientRepository.Save(client, request.ClientId, cancellationToken);
+                await clientRepository.Save(client, cancellationToken);
 
                 return Result.Success;
             }

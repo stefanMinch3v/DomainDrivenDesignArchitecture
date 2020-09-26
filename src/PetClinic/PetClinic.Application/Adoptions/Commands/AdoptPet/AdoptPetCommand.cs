@@ -45,7 +45,7 @@
 
                 pet.AddToOwner(this.currentUser.UserId);
 
-                await this.adoptionRepository.Save(pet, request.PetId, cancellationToken);
+                await this.adoptionRepository.Save(pet, cancellationToken);
 
                 return Result.Success;
             }

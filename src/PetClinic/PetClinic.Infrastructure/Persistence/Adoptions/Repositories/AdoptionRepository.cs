@@ -49,13 +49,36 @@
 
         public async Task<PetDetailsOutputModel> Details(int id, CancellationToken cancellationToken = default)
         {
+            var pet = await this.Find(id, cancellationToken);
+            return this.mapper.Map<PetDetailsOutputModel>(pet);
+        }
+
+        public Task<Domain.Adoptions.Models.Pet> GetPet(int id, CancellationToken cancellationToken = default)
+            => this.Find(id, cancellationToken);
+
+
+        public async Task Save(Domain.Adoptions.Models.Pet entity, CancellationToken cancellationToken = default)
+        {
+            var dbEntity = this.mapper.Map<Pet>(entity);
+
+            this.Data.Update(dbEntity);
+
+            await this.Data.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task<Domain.Adoptions.Models.Pet> Find(int id, CancellationToken cancellationToken = default)
+        {
             var dbPet = await base
                 .All()
-                .Where(p => p.UserId != null)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+                .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
 
-            var domainPet = this.petFactory
+            if (dbPet is null)
+            {
+                return null!;
+            }
+
+            return this.petFactory
                 .WithAge(dbPet.Age)
                 .WithBreed(dbPet.Breed)
                 .WithCastration(dbPet.IsCastrated)
@@ -64,58 +87,9 @@
                 .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)dbPet.PetType))
                 .WithFoundAt(dbPet.FoundAt)
                 .WithName(dbPet.Name)
+                .WithOptionalCreatedByOn(dbPet.CreatedBy, dbPet.CreatedOn)
+                .WithOptionalId(dbPet.Id)
                 .Build();
-
-            if (domainPet != null)
-            {
-                domainPet.Id = id;
-            }
-
-            return this.mapper.Map<PetDetailsOutputModel>(domainPet);
-        }
-
-        public async Task<Domain.Adoptions.Models.Pet> GetPet(int id, CancellationToken cancellationToken = default)
-        {
-            var pet = await base
-                .All()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
-
-            if (pet is null)
-            {
-                return null!;
-            }
-
-            return this.petFactory
-                .WithAge(pet.Age)
-                .WithBreed(pet.Breed)
-                .WithCastration(pet.IsCastrated)
-                .WithColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.Color))
-                .WithEyeColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.EyeColor))
-                .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)pet.PetType))
-                .WithFoundAt(pet.FoundAt)
-                .WithName(pet.Name)
-                .WithOptionalCreatedByOn(pet.CreatedBy, pet.CreatedOn)
-                .Build();
-        }
-                
-
-        public async Task Save(
-            Domain.Adoptions.Models.Pet entity, 
-            int? id = null, 
-            CancellationToken cancellationToken = default)
-        {
-            var dbEntity = this.mapper.Map<Pet>(entity);
-
-            if (id != null)
-            {
-                dbEntity.Id = id.Value;
-                this.Data.Entry(dbEntity).State = EntityState.Modified;
-            }
-
-            this.Data.Update(dbEntity);
-
-            await this.Data.SaveChangesAsync(cancellationToken);
         }
     }
 }
