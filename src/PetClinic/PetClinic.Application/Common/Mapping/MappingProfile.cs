@@ -30,6 +30,16 @@
 
                 methodInfo?.Invoke(instance, new object[] { this });
             }
+
+            types
+                .Where(t =>
+                    t.IsClass
+                    && !t.IsAbstract
+                    && typeof(IHaveCustomMapping).IsAssignableFrom(t))
+                .Select(Activator.CreateInstance)
+                .Cast<IHaveCustomMapping>()
+                .ToList()
+                .ForEach(mapping => mapping.ConfigureMapping(this));
         }
     }
 }

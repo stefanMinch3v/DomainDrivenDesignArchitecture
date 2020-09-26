@@ -28,10 +28,20 @@
 
         public async Task<IReadOnlyList<PetListingsOutputModel>> AllForAdoption(CancellationToken cancellationToken = default)
         {
-            var domainPets = await this.mapper
-                .ProjectTo<Domain.Adoptions.Models.Pet>(base
-                    .All()
-                    .Where(p => p.UserId != null))
+            var domainPets = await base
+                .All()
+                .Where(p => p.UserId != null)
+                .Select(pet => this.petFactory
+                    .WithAge(pet.Age)
+                    .WithBreed(pet.Breed)
+                    .WithCastration(pet.IsCastrated)
+                    .WithColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.Color))
+                    .WithEyeColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.EyeColor))
+                    .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)pet.PetType))
+                    .WithFoundAt(pet.FoundAt)
+                    .WithName(pet.Name)
+                    .WithOptionalId(pet.Id)
+                    .Build())
                 .ToListAsync(cancellationToken);
 
             return this.mapper.Map<IReadOnlyList<PetListingsOutputModel>>(domainPets);
@@ -39,10 +49,27 @@
 
         public async Task<PetDetailsOutputModel> Details(int id, CancellationToken cancellationToken = default)
         {
-            var domainPet = await this.mapper
-                .ProjectTo<Domain.Adoptions.Models.Pet>(base
-                    .All())
-                .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+            var dbPet = await base
+                .All()
+                .Where(p => p.UserId != null)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+            var domainPet = this.petFactory
+                .WithAge(dbPet.Age)
+                .WithBreed(dbPet.Breed)
+                .WithCastration(dbPet.IsCastrated)
+                .WithColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)dbPet.Color))
+                .WithEyeColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)dbPet.EyeColor))
+                .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)dbPet.PetType))
+                .WithFoundAt(dbPet.FoundAt)
+                .WithName(dbPet.Name)
+                .Build();
+
+            if (domainPet != null)
+            {
+                domainPet.Id = id;
+            }
 
             return this.mapper.Map<PetDetailsOutputModel>(domainPet);
         }

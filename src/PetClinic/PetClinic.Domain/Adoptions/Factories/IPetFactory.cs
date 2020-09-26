@@ -26,5 +26,7 @@
         IPetFactory WithFoundAt(string foundAt);
 
         IPetFactory WithOptionalCreatedByOn(string createdBy, DateTime createdOn);
+
+        IPetFactory WithOptionalId(int id);
     }
 }

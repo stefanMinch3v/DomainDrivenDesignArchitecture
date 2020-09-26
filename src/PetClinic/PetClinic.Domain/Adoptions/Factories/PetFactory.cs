@@ -16,6 +16,7 @@
         private PetType petType = default!;
         private string createdBy = default!;
         private DateTime createdOn = default!;
+        private int? id = default!;
 
         public Pet Build()
         {
@@ -33,6 +34,11 @@
             {
                 pet.CreatedBy = this.createdBy;
                 pet.CreatedOn = this.createdOn;
+            }
+
+            if (id.HasValue)
+            {
+                pet.Id = this.id.Value;
             }
 
             return pet;
@@ -88,6 +94,12 @@
             this.createdBy = createdBy;
             this.createdOn = createdOn;
 
+            return this;
+        }
+
+        public IPetFactory WithOptionalId(int id)
+        {
+            this.id = id;
             return this;
         }
 
