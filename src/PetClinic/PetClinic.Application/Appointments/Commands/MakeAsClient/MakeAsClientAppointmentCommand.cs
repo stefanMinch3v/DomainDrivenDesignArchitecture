@@ -83,22 +83,37 @@
                 //var clientAppointmentsResult = await clientAppointmentsTask;
                 //var doctorAppointmentsResult = await doctorAppointmentsTask;
 
-                var clientAppointments = await this.appointmentRepository.GetAll(userIdDoctor, cancellationToken);
-                var doctorAppointments = await this.appointmentRepository.GetAll(this.currentUser.UserId, cancellationToken);
+                var clientOverlaps = await this.CheckAppointmentsOverlappingForMember(
+                    this.currentUser.UserId,
+                    currentAppointment,
+                    cancellationToken);
 
-                foreach (var appointment in clientAppointments)
+                if (!string.IsNullOrEmpty(clientOverlaps))
                 {
-                    if (appointment.IsOverlapping(
-                        currentAppointment.AppointmentDate,
-                        currentAppointment.Client,
-                        currentAppointment.Doctor,
-                        currentAppointment.OfficeRoom))
-                    {
-                        return ApplicationConstants.InvalidMessages.UnavailableAppointment;
-                    }
+                    return clientOverlaps;
                 }
 
-                foreach (var appointment in doctorAppointments)
+                var doctorOverlaps = await this.CheckAppointmentsOverlappingForMember(
+                    userIdDoctor,
+                    currentAppointment,
+                    cancellationToken);
+
+                if (!string.IsNullOrEmpty(doctorOverlaps))
+                {
+                    return doctorOverlaps;
+                }
+
+                return string.Empty;
+            }
+
+            private async Task<string> CheckAppointmentsOverlappingForMember(
+                string userId,
+                Appointment currentAppointment,
+                CancellationToken cancellationToken)
+            {
+                var memberAppointments = await this.appointmentRepository.GetAll(userId, cancellationToken);
+
+                foreach (var appointment in memberAppointments)
                 {
                     if (appointment.IsOverlapping(
                         currentAppointment.AppointmentDate,

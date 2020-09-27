@@ -46,9 +46,12 @@
         {
             var currentUserAppointment = await base
                 .All()
+                .Include(a => a.OfficeRoom)
+                .Include(a => a.Doctor)
+                .Include(a => a.Client)
                 .FirstOrDefaultAsync(a => 
                     a.Id == appointmentId &&
-                    (a.Client.UserId == userId || a.Doctor.UserId == userId), 
+                    (a.ClientUserId == userId || a.DoctorUserId == userId), 
                 cancellationToken);
 
             if (currentUserAppointment is null)
@@ -56,7 +59,10 @@
                 return false;
             }
 
+            base.Data.Remove(currentUserAppointment.OfficeRoom);
             base.Data.Remove(currentUserAppointment);
+            base.Data.Remove(currentUserAppointment.Doctor);
+            base.Data.Remove(currentUserAppointment.Client);
 
             await base.Data.SaveChangesAsync(cancellationToken);
 

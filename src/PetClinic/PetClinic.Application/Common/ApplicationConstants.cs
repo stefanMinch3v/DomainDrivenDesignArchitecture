@@ -15,5 +15,10 @@
             public const string Pet = "Invalid pet.";
             public const string UnavailableAppointment = "The selected date/room/doctor/client is unavailable.";
         }
+
+        public static class Validations
+        {
+            public const int ZeroNumber = 0;
+        }
     }
 }
