@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="Appointments\Commands\MakeAsClient\MakeAsClientAppointmentCommand.cs~RF515ef799.TMP" />
+    <None Remove="Appointments\Queries\GetAll\AppointmentListingsOutputModel.cs~RF5703a629.TMP" />
   </ItemGroup>
 
   <ItemGroup>

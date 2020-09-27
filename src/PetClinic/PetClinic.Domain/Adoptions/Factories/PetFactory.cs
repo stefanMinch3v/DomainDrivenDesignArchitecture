@@ -97,7 +97,7 @@
             return this;
         }
 
-        public IPetFactory WithOptionalId(int id)
+        public IPetFactory WithOptionalKeyId(int id)
         {
             this.id = id;
             return this;

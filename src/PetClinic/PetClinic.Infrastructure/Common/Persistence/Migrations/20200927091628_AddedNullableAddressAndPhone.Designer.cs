@@ -2,14 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
 namespace PetClinic.Infrastructure.Common.Persistence.Migrations
 {
     [DbContext(typeof(PetClinicDbContext))]
-    partial class PetClinicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200927091628_AddedNullableAddressAndPhone")]
+    partial class AddedNullableAddressAndPhone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

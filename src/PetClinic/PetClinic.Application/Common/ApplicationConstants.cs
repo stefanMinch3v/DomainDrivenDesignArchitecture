@@ -13,6 +13,7 @@
             public const string Client = "Invalid client.";
             public const string Doctor = "Invalid client.";
             public const string Pet = "Invalid pet.";
+            public const string UnavailableAppointment = "The selected date/room/doctor/client is unavailable.";
         }
     }
 }

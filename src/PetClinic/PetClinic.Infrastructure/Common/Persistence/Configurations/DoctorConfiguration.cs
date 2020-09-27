@@ -17,7 +17,7 @@
 
             builder
                 .Property(d => d.PhoneNumber)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(d => d.UserId)
@@ -25,7 +25,7 @@
 
             builder
                 .Property(d => d.Address)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(d => d.DoctorType)

@@ -37,7 +37,7 @@
         {
             var clientFactory = new ClientFactory();
             client(clientFactory);
-            clientFactory.Build();
+            this.client = clientFactory.Build();
 
             return this;
         }
@@ -46,7 +46,7 @@
         {
             var doctorFactory = new DoctorFactory();
             doctor(doctorFactory);
-            doctorFactory.Build();
+            this.doctor = doctorFactory.Build();
 
             return this;
         }

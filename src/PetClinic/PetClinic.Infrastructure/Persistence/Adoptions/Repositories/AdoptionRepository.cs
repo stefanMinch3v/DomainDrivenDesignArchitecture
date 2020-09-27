@@ -30,7 +30,7 @@
         {
             var domainPets = await base
                 .All()
-                .Where(p => p.UserId != null)
+                .Where(p => p.UserId == null)
                 .Select(pet => this.petFactory
                     .WithAge(pet.Age)
                     .WithBreed(pet.Breed)
@@ -40,7 +40,7 @@
                     .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)pet.PetType))
                     .WithFoundAt(pet.FoundAt)
                     .WithName(pet.Name)
-                    .WithOptionalId(pet.Id)
+                    .WithOptionalKeyId(pet.Id)
                     .Build())
                 .ToListAsync(cancellationToken);
 
@@ -49,8 +49,8 @@
 
         public async Task<PetDetailsOutputModel> Details(int id, CancellationToken cancellationToken = default)
         {
-            var pet = await this.Find(id, cancellationToken);
-            return this.mapper.Map<PetDetailsOutputModel>(pet);
+            var domainPet = await this.Find(id, cancellationToken);
+            return this.mapper.Map<PetDetailsOutputModel>(domainPet);
         }
 
         public Task<Domain.Adoptions.Models.Pet> GetPet(int id, CancellationToken cancellationToken = default)
@@ -88,7 +88,7 @@
                 .WithFoundAt(dbPet.FoundAt)
                 .WithName(dbPet.Name)
                 .WithOptionalCreatedByOn(dbPet.CreatedBy, dbPet.CreatedOn)
-                .WithOptionalId(dbPet.Id)
+                .WithOptionalKeyId(dbPet.Id)
                 .Build();
         }
     }

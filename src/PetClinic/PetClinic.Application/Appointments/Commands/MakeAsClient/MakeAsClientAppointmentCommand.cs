@@ -14,7 +14,7 @@
     public class MakeAsClientAppointmentCommand : IRequest<Result>
     {
         public int DoctorType { get; set; }
-        public string Name { get; set; } = default!;
+        public string DoctorName { get; set; } = default!;
         public string UserIdDoctor { get; set; } = default!;
         public int RoomNumber { get; set; }
         public DateTime StartDate { get; set; }
@@ -44,23 +44,10 @@
                     return ApplicationConstants.InvalidMessages.Client;
                 }
 
-                // check if any existing with the current date and if room is available here
-                var isDateAvailable = await this.appointmentRepository.IsDateAvailable(
-                    request.UserIdDoctor,
-                    request.RoomNumber,
-                    request.StartDate,
-                    request.EndDate,
-                    cancellationToken);
-
-                if (!isDateAvailable)
-                {
-                    return "The chosen date is not available.";
-                }
-
                 var appointment = this.appointmentFactory
                     .WithDoctor(doctor => doctor
                         .WithDoctorType(Enumeration.FromValue<DoctorType>(request.DoctorType))
-                        .WithName(request.Name)
+                        .WithName(request.DoctorName)
                         .WithUserId(request.UserIdDoctor)
                         .Build())
                     .WithClient(client => client
@@ -71,9 +58,59 @@
                     .WithAppointmentDate(request.StartDate, request.EndDate)
                     .Build();
 
+                var result = await this.CheckAppointmentsOverlapping(request.UserIdDoctor, appointment, cancellationToken);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    return result;
+                }
+
                 await this.appointmentRepository.Save(appointment, cancellationToken: cancellationToken);
 
                 return Result.Success;
+            }
+
+            private async Task<string> CheckAppointmentsOverlapping(
+                string userIdDoctor,
+                Appointment currentAppointment,
+                CancellationToken cancellationToken)
+            {
+                // this does not work - https://docs.microsoft.com/en-us/ef/core/miscellaneous/configuring-dbcontext#avoiding-dbcontext-threading-issues
+                //var clientAppointmentsTask = this.appointmentRepository.GetAll(userIdClient, cancellationToken);
+                //var doctorAppointmentsTask = this.appointmentRepository.GetAll(this.currentUser.UserId, cancellationToken);
+
+                //await Task.WhenAll(clientAppointmentsTask, doctorAppointmentsTask);
+
+                //var clientAppointmentsResult = await clientAppointmentsTask;
+                //var doctorAppointmentsResult = await doctorAppointmentsTask;
+
+                var clientAppointments = await this.appointmentRepository.GetAll(userIdDoctor, cancellationToken);
+                var doctorAppointments = await this.appointmentRepository.GetAll(this.currentUser.UserId, cancellationToken);
+
+                foreach (var appointment in clientAppointments)
+                {
+                    if (appointment.IsOverlapping(
+                        currentAppointment.AppointmentDate,
+                        currentAppointment.Client,
+                        currentAppointment.Doctor,
+                        currentAppointment.OfficeRoom))
+                    {
+                        return ApplicationConstants.InvalidMessages.UnavailableAppointment;
+                    }
+                }
+
+                foreach (var appointment in doctorAppointments)
+                {
+                    if (appointment.IsOverlapping(
+                        currentAppointment.AppointmentDate,
+                        currentAppointment.Client,
+                        currentAppointment.Doctor,
+                        currentAppointment.OfficeRoom))
+                    {
+                        return ApplicationConstants.InvalidMessages.UnavailableAppointment;
+                    }
+                }
+
+                return string.Empty;
             }
         }
     }

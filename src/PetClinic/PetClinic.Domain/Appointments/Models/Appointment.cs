@@ -43,5 +43,32 @@
         public AppointmentDate AppointmentDate { get; }
 
         public OfficeRoom OfficeRoom { get; }
+
+        public bool IsOverlapping(
+            AppointmentDate appointmentDate,
+            Client client,
+            Doctor doctor,
+            OfficeRoom officeRoom)
+        {
+            var occupiedRoom = officeRoom.Id == this.OfficeRoom.Id &&
+                !this.OfficeRoom.IsAvailable;
+
+            var dateIsNotFree = (appointmentDate.StartDate > this.AppointmentDate.EndDate &&
+                    appointmentDate.EndDate > this.AppointmentDate.EndDate) ||
+                appointmentDate.EndDate < this.AppointmentDate.StartDate &&
+                    appointmentDate.StartDate < this.AppointmentDate.StartDate;
+
+            var busyDoctor = doctor.UserId == this.Doctor.UserId;
+            var busyClient = client.UserId == this.Client.UserId;
+
+            if (occupiedRoom &&
+                !dateIsNotFree &&
+                (busyDoctor || busyClient))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

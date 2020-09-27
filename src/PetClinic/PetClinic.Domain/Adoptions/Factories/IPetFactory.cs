@@ -27,6 +27,6 @@
 
         IPetFactory WithOptionalCreatedByOn(string createdBy, DateTime createdOn);
 
-        IPetFactory WithOptionalId(int id);
+        IPetFactory WithOptionalKeyId(int id);
     }
 }

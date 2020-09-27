@@ -22,13 +22,11 @@
             builder
                 .HasOne(a => a.Client)
                 .WithMany(c => c.Appointments)
-                .HasForeignKey(a => a.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasOne(a => a.Doctor)
                 .WithMany(c => c.Appointments)
-                .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder

@@ -5,7 +5,8 @@
     using Application.MedicalRecords.Queries.ClientDetails;
     using AutoMapper;
     using Common.Persistence;
-    using Domain.MedicalRecords.Models;
+    using Domain.MedicalRecords.Factories;
+    using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,10 +16,14 @@
     internal class ClientRepository : DataRepository<Client>, IClientRepository
     {
         private readonly IMapper mapper;
+        private readonly IClientFactory clientFactory;
 
-        public ClientRepository(PetClinicDbContext context, IMapper mapper)
-            : base(context) 
-            => this.mapper = mapper;
+        public ClientRepository(PetClinicDbContext context, IMapper mapper, IClientFactory clientFactory)
+            : base(context)
+        {
+            this.mapper = mapper;
+            this.clientFactory = clientFactory;
+        }
 
         public async Task<bool> AnyExisting(string userId, CancellationToken cancellationToken = default)
             => await base
@@ -44,9 +49,36 @@
                 .SingleOrDefaultAsync(c => c.UserId == userId, cancellationToken))
                 ?.Id ?? 0;
 
-        public async Task<Client> Single(int id, CancellationToken cancellationToken = default)
-            => await this.All()
-                .Include(c => c.Pets)
-                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        public async Task Save(Domain.MedicalRecords.Models.Client entity, CancellationToken cancellationToken = default)
+        {
+            var dbEntity = this.mapper.Map<Client>(entity);
+
+            this.Data.Update(dbEntity);
+
+            await this.Data.SaveChangesAsync(cancellationToken);
+        }
+
+        public Task<Domain.MedicalRecords.Models.Client> Single(int id, CancellationToken cancellationToken = default)
+            => this.Find(id, cancellationToken);
+
+        private async Task<Domain.MedicalRecords.Models.Client> Find(int id, CancellationToken cancellationToken = default)
+        {
+            var dbClient = await base
+                .All()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+
+            if (dbClient is null)
+            {
+                return null!;
+            }
+
+            return this.clientFactory
+                .WithAddress(dbClient.Address!)
+                .WithName(dbClient.Name)
+                .WithPhoneNumber(dbClient.PhoneNumber!)
+                .WithUserId(dbClient.UserId)
+                .Build();
+        }
     }
 }

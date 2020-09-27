@@ -13,7 +13,7 @@
 
             builder
                 .Property(c => c.PhoneNumber)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(c => c.UserId)
@@ -21,7 +21,7 @@
 
             builder
                 .Property(c => c.Address)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(c => c.Name)

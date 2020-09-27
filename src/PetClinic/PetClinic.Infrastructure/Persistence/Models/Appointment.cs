@@ -3,18 +3,16 @@
     using Domain.Common;
     using System;
 
-    public class Appointment : AuditableEntity<int>
+    public class Appointment : AuditableEntity<int>, IAggregateRoot
     {
-        public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; } = default!;
+        public string DoctorUserId { get; set; } = default!;
+        public string ClientUserId { get; set; } = default!;
 
-        public int ClientId { get; set; }
+        public Doctor Doctor { get; set; } = default!;
         public Client Client { get; set; } = default!;
+        public OfficeRoom OfficeRoom { get; set; } = default!;
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
-        public int OfficeRoomId { get; set; }
-        public OfficeRoom OfficeRoom { get; set; } = default!;
     }
 }

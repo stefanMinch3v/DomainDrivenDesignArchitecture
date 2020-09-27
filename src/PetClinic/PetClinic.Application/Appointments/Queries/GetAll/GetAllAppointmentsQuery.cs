@@ -6,9 +6,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class GetAllAppointmentsQuery : IRequest<IReadOnlyList<object>>
+    public class GetAllAppointmentsQuery : IRequest<IReadOnlyList<AppointmentListingsOutputModel>>
     {
-        public class GetAllAppointmentsQueryHandler : IRequestHandler<GetAllAppointmentsQuery, IReadOnlyList<object>>
+        public class GetAllAppointmentsQueryHandler : IRequestHandler<GetAllAppointmentsQuery, IReadOnlyList<AppointmentListingsOutputModel>>
         {
             private readonly IAppointmentRepository appointmentRepository;
             private readonly ICurrentUser currentUser;
@@ -21,8 +21,8 @@
                 this.currentUser = currentUser;
             }
 
-            public Task<IReadOnlyList<object>> Handle(GetAllAppointmentsQuery request, CancellationToken cancellationToken)
-                => this.appointmentRepository.GetAll(this.currentUser.UserId, cancellationToken);
+            public Task<IReadOnlyList<AppointmentListingsOutputModel>> Handle(GetAllAppointmentsQuery request, CancellationToken cancellationToken)
+                => this.appointmentRepository.GetAllList(this.currentUser.UserId, cancellationToken);
         }
     }
 }

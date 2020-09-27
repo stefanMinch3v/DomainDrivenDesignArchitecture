@@ -1,11 +1,11 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.MedicalRecords.Repositories
 {
+    using Persistence.Models;
     using Application.MedicalRecords;
     using Application.MedicalRecords.Queries.AllDoctors;
     using Application.MedicalRecords.Queries.DoctorDetails;
     using AutoMapper;
     using Common.Persistence;
-    using Domain.MedicalRecords.Models;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -36,5 +36,14 @@
             => await this.mapper
                 .ProjectTo<DoctorListingsOutputModel>(this.All())
                 .ToListAsync(cancellationToken);
+
+        public async Task Save(Domain.MedicalRecords.Models.Doctor entity, CancellationToken cancellationToken = default)
+        {
+            var dbEntity = this.mapper.Map<Doctor>(entity);
+
+            this.Data.Update(dbEntity);
+
+            await this.Data.SaveChangesAsync(cancellationToken);
+        }
     }
 }

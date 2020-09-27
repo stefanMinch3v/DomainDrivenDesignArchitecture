@@ -4,17 +4,16 @@
     using Application.Identity;
     using Application.Identity.Commands.LoginUser;
     using Application.Identity.Commands.RegisterUser;
-    using Common;
     using Microsoft.AspNetCore.Identity;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using static Infrastructure.Common.InfrastructureConstants;
+
     internal class IdentityService : IIdentity
     {
-        private const string InvalidLoginErrorMessage = "Invalid credentials.";
-
         private readonly UserManager<User> userManager;
         private readonly IJwtTokenGenerator jwtTokenGenerator;
 
@@ -27,6 +26,12 @@
         public async Task<Result> Register(RegisterUserCommand userInput)
         {
             var user = new User(userInput.Email, userInput.Name);
+
+            var existingUser = await userManager.FindByEmailAsync(userInput.Email);
+            if (existingUser != null)
+            {
+                return IdentityErrors.InvalidEmail;
+            }
 
             var identityResult = await userManager.CreateAsync(user, userInput.Password);
 
@@ -42,13 +47,13 @@
             var user = await userManager.FindByEmailAsync(userInput.Email);
             if (user == null)
             {
-                return InvalidLoginErrorMessage;
+                return IdentityErrors.InvalidLogin;
             }
 
             var passwordValid = await userManager.CheckPasswordAsync(user, userInput.Password);
             if (!passwordValid)
             {
-                return InvalidLoginErrorMessage;
+                return IdentityErrors.InvalidLogin;
             }
 
             var userRoles = await this.userManager.GetRolesAsync(user);
@@ -78,10 +83,10 @@
             var roles = await userManager.GetRolesAsync(user);
             if (roles.Any())
             {
-                return Result.Failure(new string[] { "The user is already a member of the clinic." });
+                return Result.Failure(new string[] { IdentityErrors.InvalidClinicMember });
             }
 
-            var result = await userManager.AddToRoleAsync(user, InfrastructureConstants.Roles.Client);
+            var result = await userManager.AddToRoleAsync(user, Roles.Client);
             if (!result.Succeeded)
             {
                 return Result.Failure(result.Errors.Select(e => e.Description));
@@ -101,10 +106,10 @@
             var roles = await userManager.GetRolesAsync(user);
             if (roles.Any())
             {
-                return Result.Failure(new string[] { "The user is already a member of the clinic." });
+                return Result.Failure(new string[] { IdentityErrors.InvalidClinicMember });
             }
 
-            var result = await userManager.AddToRoleAsync(user, InfrastructureConstants.Roles.Doctor);
+            var result = await userManager.AddToRoleAsync(user, Roles.Doctor);
             if (!result.Succeeded)
             {
                 return Result.Failure(result.Errors.Select(e => e.Description));
@@ -118,10 +123,10 @@
             var user = await userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return Result.Failure(new string[] { "Invalid user." });
+                return Result.Failure(new string[] { IdentityErrors.InvalidUser });
             }
 
-            return await userManager.IsInRoleAsync(user, InfrastructureConstants.Roles.Doctor);
+            return await userManager.IsInRoleAsync(user, Roles.Doctor);
         }
 
         public async Task<Result> IsInRoleClient(string userId)
@@ -129,10 +134,10 @@
             var user = await userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return Result.Failure(new string[] { "Invalid user." });
+                return Result.Failure(new string[] { IdentityErrors.InvalidUser });
             }
 
-            return await userManager.IsInRoleAsync(user, InfrastructureConstants.Roles.Client);
+            return await userManager.IsInRoleAsync(user, Roles.Client);
         }
     }
 }
