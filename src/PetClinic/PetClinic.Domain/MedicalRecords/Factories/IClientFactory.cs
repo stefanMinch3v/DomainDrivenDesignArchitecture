@@ -3,6 +3,8 @@
     using Common;
     using Common.SharedKernel;
     using Models;
+    using System;
+    using System.Collections.Generic;
 
     public interface IClientFactory : IFactory<Client>
     {
@@ -17,5 +19,9 @@
         IClientFactory WithPhoneNumber(PhoneNumber phoneNumber);
 
         IClientFactory WithPhoneNumber(string phoneNumber);
+
+        IClientFactory WithPets(IList<Action<PetFactory>> pets);
+
+        IClientFactory WithPet(Action<PetFactory> pet);
     }
 }

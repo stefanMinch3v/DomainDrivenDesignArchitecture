@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence
 {
     using AutoMapper;
+    using Domain.Common;
 
     internal class AutoMapperConfig : Profile
     {
@@ -73,6 +74,22 @@
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.ModifiedOn, opt => opt.Ignore());
+
+            // opt.Ignore() is here because automapper cannot map to Enumerations and Value objects
+            // so the actual mapping is by hand in the repository
+            this.CreateMap<Infrastructure.Persistence.Models.Pet, Domain.MedicalRecords.Models.Pet>()
+                .ForMember(dest => dest.Color, opt => opt.Ignore())
+                .ForMember(dest => dest.EyeColor, opt => opt.Ignore())
+                .ForMember(dest => dest.PetType, opt => opt.Ignore())
+                .ForMember(dest => dest.FoundAt, opt => opt.Ignore())
+                .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
+
+            this.CreateMap<Domain.MedicalRecords.Models.Pet, Infrastructure.Persistence.Models.Pet>()
+                .ForMember(dest => dest.Color, opt => opt.Ignore())
+                .ForMember(dest => dest.EyeColor, opt => opt.Ignore())
+                .ForMember(dest => dest.PetType, opt => opt.Ignore())
+                .ForMember(dest => dest.FoundAt, opt => opt.Ignore())
+                .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
         }
     }
 }

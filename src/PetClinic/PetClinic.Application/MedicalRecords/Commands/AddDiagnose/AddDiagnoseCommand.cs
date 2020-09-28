@@ -9,7 +9,7 @@
 
     public class AddDiagnoseCommand : IRequest<Result>
     {
-        public int ClientId { get; set; }
+        public string UserIdClient { get; set; } = default!;
         public int PetId { get; set; }
         public bool IsSick { get; set; }
         public DateTime Date { get; set; }
@@ -29,7 +29,7 @@
                     throw new ArgumentNullException("Invalid command.");
                 }
 
-                var client = await this.clientRepository.Single(request.ClientId);
+                var client = await this.clientRepository.Single(request.UserIdClient);
                 if (client is null)
                 {
                     throw new ArgumentNullException(ApplicationConstants.InvalidMessages.Client);
@@ -43,7 +43,7 @@
 
                 currentPet.AddDiagnose(request.IsSick, request.Date, request.Diagnose);
 
-                await clientRepository.Save(client, cancellationToken);
+                await this.clientRepository.Save(client, cancellationToken);
 
                 return Result.Success;
             }

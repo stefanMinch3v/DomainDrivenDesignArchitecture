@@ -50,9 +50,9 @@
 
         public PhoneNumber PhoneNumber { get; }
 
-        public IReadOnlyCollection<Pet> Pets => this.pets.ToList().AsReadOnly();
+        public IReadOnlyList<Pet> Pets => this.pets.ToList().AsReadOnly();
 
-        public IReadOnlyCollection<Appointment> Appointments => this.appointments.ToList().AsReadOnly();
+        public IReadOnlyList<Appointment> Appointments => this.appointments.ToList().AsReadOnly();
 
         public void AddPet(Pet pet)
         {

@@ -39,7 +39,8 @@
             PetType petType,
             Color color,
             Color eyeColor,
-            Address foundAt)
+            Address foundAt,
+            string? userId = null)
         {
             Guard.AgainstEmptyString<InvalidNameException>(name, nameof(name));
             Guard.AgainstEmptyString<InvalidBreedException>(breed, nameof(breed));
@@ -63,17 +64,22 @@
             this.EyeColor = eyeColor;
             this.FoundAt = foundAt;
             this.petStatusData = new HashSet<PetStatus>();
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                this.UserId = userId;
+            }
         }
 
-        public PetType PetType { get; }
+        public PetType PetType { get; private set; }
 
         public string Breed { get; }
 
         public string Name { get; }
 
-        public Color Color { get; }
+        public Color Color { get; private set; }
 
-        public Color EyeColor { get; }
+        public Color EyeColor { get; private set; }
 
         public int Age { get; }
 
@@ -81,14 +87,42 @@
 
         public bool IsAdopted { get; }
 
-        public Address FoundAt { get; }
+        public Address FoundAt { get; private set; }
 
-        public IReadOnlyCollection<PetStatus> PetStatusData => this.petStatusData.ToList().AsReadOnly();
+        public string? UserId { get; private set; }
+
+        public IReadOnlyList<PetStatus> PetStatusData => this.petStatusData.ToList().AsReadOnly();
+
+        public void UpdateColor(Color color)
+        {
+            this.Color = color;
+        }
+
+        public void UpdateEyeColor(Color color)
+        {
+            this.EyeColor = color;
+        }
+
+        public void UpdatePetType(PetType petType)
+        {
+            this.PetType = petType;
+        }
+
+        public void UpdateAddress(Address foundAt)
+        {
+            this.FoundAt = foundAt;
+        }
 
         public void AddDiagnose(bool isSick, DateTime date, string? diagnose = null)
         {
             var petStatus = new PetStatus(isSick, date, diagnose);
             this.petStatusData.Add(petStatus);
+        }
+
+        public void UpdateOwner(string userId)
+        {
+            Guard.AgainstEmptyString<InvalidPetException>(nameof(userId), userId);
+            this.UserId = userId;
         }
     }
 }

@@ -3,6 +3,8 @@
     using Common.Exceptions;
     using Common.SharedKernel;
     using Models;
+    using System;
+    using System.Collections.Generic;
 
     internal class ClientFactory : IClientFactory
     {
@@ -10,18 +12,27 @@
         private string name = default!;
         private PhoneNumber phoneNumber = default!;
         private string userId = default!;
+        private List<Pet> pets = default!;
 
         private bool isAddressSet = false;
         private bool isPhoneSet = false;
 
+        public ClientFactory()
+        {
+            this.pets = new List<Pet>();
+        }
+
         public Client Build()
         {
-            if (!isPhoneSet || !isAddressSet)
+            if (!this.isPhoneSet || !this.isAddressSet)
             {
                 throw new InvalidClientException("PhoneNumber and address must be set");
             }
 
-            return new Client(this.name, this.userId, this.address, this.phoneNumber);
+            var client = new Client(this.name, this.userId, this.address, this.phoneNumber);
+            this.pets.ForEach(pet => client.AddPet(pet));
+
+            return client;
         }
 
         public IClientFactory WithAddress(Address address)
@@ -37,6 +48,31 @@
         public IClientFactory WithName(string name)
         {
             this.name = name;
+            return this;
+        }
+
+        public IClientFactory WithPet(Action<PetFactory> pet)
+        {
+            var petFactory = new PetFactory();
+            pet(petFactory);
+
+            this.pets.Add(petFactory.Build());
+
+            return this;
+        }
+
+        public IClientFactory WithPets(IList<Action<PetFactory>> pets)
+        {
+            this.pets = new List<Pet>();
+
+            foreach (var pet in pets)
+            {
+                var petFactory = new PetFactory();
+                pet(petFactory);
+
+                this.pets.Add(petFactory.Build());
+            }
+
             return this;
         }
 
