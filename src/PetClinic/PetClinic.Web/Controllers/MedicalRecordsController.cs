@@ -13,12 +13,12 @@
     {
         [HttpGet]
         [Route(nameof(ClientDetails))]
-        public async Task<ActionResult<ClientDetailsOutputModel>> ClientDetails(int id)
+        public async Task<ActionResult<ClientDetailsOutputModel>> ClientDetails(string id)
             => await base.Send(new ClientDetailsQuery(id));
 
         [HttpGet]
         [Route(nameof(DoctorDetails))]
-        public async Task<ActionResult<DoctorDetailsOutputModel>> DoctorDetails(int id)
+        public async Task<ActionResult<DoctorDetailsOutputModel>> DoctorDetails(string id)
              => await base.Send(new DoctorDetailsQuery(id));
 
         [HttpGet]

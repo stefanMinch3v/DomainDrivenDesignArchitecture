@@ -6,12 +6,12 @@
 
     public class DoctorDetailsQuery : IRequest<DoctorDetailsOutputModel>
     {
-        public DoctorDetailsQuery(int id)
+        public DoctorDetailsQuery(string id)
         {
             this.MemberId = id;
         }
 
-        public int MemberId { get; }
+        public string MemberId { get; }
 
         public class DoctorDetailsQueryHandler : IRequestHandler<DoctorDetailsQuery, DoctorDetailsOutputModel>
         {

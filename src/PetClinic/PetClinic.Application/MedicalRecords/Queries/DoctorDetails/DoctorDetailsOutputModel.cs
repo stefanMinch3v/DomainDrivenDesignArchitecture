@@ -1,9 +1,6 @@
 ﻿namespace PetClinic.Application.MedicalRecords.Queries.DoctorDetails
 {
-    using Common.Mapping;
-    using Domain.MedicalRecords.Models;
-
-    public class DoctorDetailsOutputModel : IMapFrom<Doctor>
+    public class DoctorDetailsOutputModel
     {
         public int Id { get; set; }
 

@@ -81,7 +81,6 @@
                 .ForPath(dest => dest.FoundAt, opt => opt.MapFrom(src => src.FoundAt))
                 .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
 
-
             this.CreateMap<Domain.MedicalRecords.Models.Pet, Infrastructure.Persistence.Models.Pet>()
                 .ForPath(dest => dest.FoundAt, opt => opt.MapFrom(src => src.FoundAt.Value))
                 .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
@@ -97,6 +96,24 @@
 
             this.CreateMap<Domain.Common.SharedKernel.PetType, Infrastructure.Persistence.Models.PetType>()
                 .ConvertUsing(new PetTypeConverterReverse());
+
+            this.CreateMap<Infrastructure.Persistence.Models.Client, Application.MedicalRecords.Queries.AllClients.ClientListingsOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Doctor, Application.MedicalRecords.Queries.AllDoctors.DoctorListingsOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Client, Application.MedicalRecords.Queries.ClientDetails.ClientDetailsOutputModel>()
+                .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
+                .ForMember(dest => dest.Pets, opt => opt.MapFrom(src => src.Pets));
+
+            this.CreateMap<Infrastructure.Persistence.Models.Appointment, Application.MedicalRecords.Queries.ClientDetails.AppointmentOutputModel>()
+                .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => src.Doctor));
+
+            this.CreateMap<Infrastructure.Persistence.Models.Doctor, Application.MedicalRecords.Queries.ClientDetails.DoctorFlatOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Pet, Application.MedicalRecords.Queries.ClientDetails.PetOutputModel>()
+                .ForMember(dest => dest.PetStatusData, opt => opt.MapFrom(src => src.PetStatusData));
+
+            this.CreateMap<Infrastructure.Persistence.Models.PetStatus, Application.MedicalRecords.Queries.ClientDetails.PetStatusDataOutputModel>();
         }
 
         internal class ColorConverter : ITypeConverter<Infrastructure.Persistence.Models.Color, Domain.Common.SharedKernel.Color>

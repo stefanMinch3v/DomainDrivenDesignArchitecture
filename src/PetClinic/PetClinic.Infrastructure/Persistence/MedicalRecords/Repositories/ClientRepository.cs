@@ -4,6 +4,7 @@
     using Application.MedicalRecords.Queries.AllClients;
     using Application.MedicalRecords.Queries.ClientDetails;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Common.Persistence;
     using Domain.MedicalRecords.Factories;
     using Infrastructure.Persistence.Models;
@@ -31,11 +32,41 @@
                 .All()
                 .AnyAsync(c => c.UserId == userId, cancellationToken);
 
-        public async Task<ClientDetailsOutputModel> Details(int id, CancellationToken cancellationToken = default)
+        public async Task<ClientDetailsOutputModel> Details(string userId, CancellationToken cancellationToken = default)
+        {
+            // cannot use task when all with db context
+            var clientInfo = await this.mapper
+                .ProjectTo<ClientDetailsOutputModel>(this
+                    .All()
+                    .Where(c => c.UserId == userId))
+                .FirstOrDefaultAsync(cancellationToken);
+
+            var appointmentsInfo = await this
+                .Data.Set<Appointment>()
+                .Where(a => a.ClientUserId == userId)
+                .ProjectTo<AppointmentOutputModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            var petsInfo = await this
+                .Data.Set<Pet>()
+                .Where(a => a.UserId == userId)
+                .ProjectTo<PetOutputModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            clientInfo.Appointments.AddRange(appointmentsInfo);
+            clientInfo.Pets.AddRange(petsInfo);
+
+            return clientInfo;
+        }
+
+        public async Task<ClientDetailsOutputModel> Details(
+            string userId, 
+            string currentUserId, 
+            CancellationToken cancellationToken = default)
             => await this.mapper
                 .ProjectTo<ClientDetailsOutputModel>(this
                     .All()
-                    .Where(c => c.Id == id)
+                    .Where(c => c.UserId == userId && c.UserId == currentUserId)
                     .Include(c => c.Appointments))
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -61,17 +92,19 @@
             await this.Data.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<Domain.MedicalRecords.Models.Client> Single(string id, CancellationToken cancellationToken = default)
-            => this.Find(id, cancellationToken);
+        public Task<Domain.MedicalRecords.Models.Client> Single(string userId, CancellationToken cancellationToken = default)
+            => this.Find(userId, cancellationToken);
 
-        private async Task<Domain.MedicalRecords.Models.Client> Find(string id, CancellationToken cancellationToken = default)
+        private async Task<Domain.MedicalRecords.Models.Client> Find(
+            string userId, 
+            CancellationToken cancellationToken = default)
         {
             // singleOrDefault gets Enumerator failed to MoveNextAsync: 
             // https://github.com/dotnet/efcore/issues/19639
             var dbClient = await base
                 .All()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.UserId == id, cancellationToken);
+                .FirstOrDefaultAsync(p => p.UserId == userId, cancellationToken);
 
             if (dbClient is null)
             {
@@ -81,7 +114,7 @@
             var dbPets = await base
                 .Data
                 .Set<Pet>()
-                .Where(p => p.UserId == id)
+                .Where(p => p.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
@@ -124,6 +157,7 @@
             return domainClient.Build();
         }
 
+        // nested mapping with value objects
         private void MapTo(
             Client dbClient,
             Domain.MedicalRecords.Models.Client domainClient)

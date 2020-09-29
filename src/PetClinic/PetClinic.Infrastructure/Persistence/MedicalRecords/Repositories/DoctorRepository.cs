@@ -25,11 +25,11 @@
                 .All()
                 .AnyAsync(d => d.UserId == userId, cancellationToken);
 
-        public async Task<DoctorDetailsOutputModel> Details(int id, CancellationToken cancellationToken = default)
+        public async Task<DoctorDetailsOutputModel> Details(string userId, CancellationToken cancellationToken = default)
             => await this.mapper
                 .ProjectTo<DoctorDetailsOutputModel>(this
                     .All()
-                    .Where(c => c.Id == id))
+                    .Where(c => c.UserId == userId))
                 .FirstOrDefaultAsync(cancellationToken);
 
         public async Task<IReadOnlyList<DoctorListingsOutputModel>> GetAll(CancellationToken cancellationToken)
