@@ -97,12 +97,10 @@
                         .WithDoctorType(
                             Enumeration.FromValue<Domain.Common.SharedKernel.DoctorType>((int)a.Doctor.DoctorType))
                         .WithName(a.Doctor.Name)
-                        .WithUserId(a.DoctorUserId)
-                        .Build())
+                        .WithUserId(a.DoctorUserId))
                     .WithClient(client => client
                         .WithName(a.Client.Name)
-                        .WithUserId(a.ClientUserId)
-                        .Build())
+                        .WithUserId(a.ClientUserId))
                     .WithOfficeRoom(
                         a.OfficeRoom.Number,
                         Enumeration.FromValue<Domain.Appointments.Models.OfficeRoomType>((int)a.OfficeRoom.OfficeRoomType))

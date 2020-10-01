@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Appointments.Factories
+﻿namespace PetClinic.Domain.Appointments.Factories.Internal
 {
     using Models;
     using Common.SharedKernel;
@@ -9,7 +9,7 @@
         private string name = default!;
         private string userId = default!;
 
-        public Doctor Build()
+        internal Doctor Build()
             => new Doctor(this.name, this.userId, this.doctorType);
 
         public DoctorFactory WithDoctorType(DoctorType doctorType)

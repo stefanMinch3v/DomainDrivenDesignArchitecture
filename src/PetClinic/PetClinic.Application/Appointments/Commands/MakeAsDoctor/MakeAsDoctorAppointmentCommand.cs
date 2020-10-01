@@ -49,12 +49,10 @@
                     .WithDoctor(doctor => doctor
                         .WithDoctorType(Enumeration.FromValue<DoctorType>(request.DoctorType))
                         .WithName(this.currentUser.UserName)
-                        .WithUserId(this.currentUser.UserId)
-                        .Build())
+                        .WithUserId(this.currentUser.UserId))
                     .WithClient(client => client
                         .WithName(request.ClientName)
-                        .WithUserId(request.UserIdClient)
-                        .Build())
+                        .WithUserId(request.UserIdClient))
                     .WithOfficeRoom(request.RoomNumber, Enumeration.FromValue<OfficeRoomType>(request.OfficeRoomType))
                     .WithAppointmentDate(request.StartDate, request.EndDate)
                     .Build();

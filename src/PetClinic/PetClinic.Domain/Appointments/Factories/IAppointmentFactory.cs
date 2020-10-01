@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Domain.Appointments.Factories
 {
     using Common;
+    using Internal;
     using Models;
     using System;
 

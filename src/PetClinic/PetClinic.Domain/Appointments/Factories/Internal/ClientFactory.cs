@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Appointments.Factories
+﻿namespace PetClinic.Domain.Appointments.Factories.Internal
 {
     using Models;
 
@@ -7,7 +7,7 @@
         private string name = default!;
         private string userId = default!;
 
-        public Client Build()
+        internal Client Build()
             => new Client(this.name, this.userId);
 
         public ClientFactory WithName(string name)

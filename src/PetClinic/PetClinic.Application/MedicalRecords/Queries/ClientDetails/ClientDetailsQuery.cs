@@ -4,7 +4,7 @@
     using MediatR;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Common.ApplicationConstants;
+    using static Application.Common.ApplicationConstants;
 
     public class ClientDetailsQuery : IRequest<ClientDetailsOutputModel>
     {

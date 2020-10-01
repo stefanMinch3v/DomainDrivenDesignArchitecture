@@ -3,6 +3,7 @@
     using Appointments.Models;
     using Common.Exceptions;
     using Common.SharedKernel;
+    using Internal;
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;

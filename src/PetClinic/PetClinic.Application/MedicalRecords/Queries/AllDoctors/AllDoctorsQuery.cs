@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Common.ApplicationConstants;
+    using static Application.Common.ApplicationConstants;
 
     public class AllDoctorsQuery : IRequest<IReadOnlyList<DoctorListingsOutputModel>>
     {

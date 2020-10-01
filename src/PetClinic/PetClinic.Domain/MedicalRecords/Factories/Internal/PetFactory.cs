@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.MedicalRecords.Factories
+﻿namespace PetClinic.Domain.MedicalRecords.Factories.Internal
 {
     using Common.Exceptions;
     using Common.SharedKernel;
@@ -33,7 +33,7 @@
         private bool isEyeColorSet = false;
         private bool isFoundAtSet = false;
 
-        public Pet Build()
+        internal Pet Build()
         {
             if (!this.isNameSet ||
                 !this.isBreedSet ||

@@ -1,5 +1,6 @@
 ﻿namespace PetClinic.Application.Identity.Commands.RegisterDoctor
 {
+    using Application.MedicalRecords;
     using Common;
     using Common.Contracts;
     using Domain.Common;
@@ -29,15 +30,15 @@
             private readonly ICurrentUser currentUser;
             private readonly IIdentity identity;
             private readonly IDoctorFactory doctorFactory;
-            private readonly MedicalRecords.IDoctorRepository doctorRepository;
-            private readonly MedicalRecords.IClientRepository clientRepository;
+            private readonly IDoctorRepository doctorRepository;
+            private readonly IClientRepository clientRepository;
 
             public RegisterDoctorCommandHandler(
                 ICurrentUser currentUser,
                 IIdentity identity,
                 IDoctorFactory doctorFactory,
-                MedicalRecords.IDoctorRepository doctorRepository,
-                MedicalRecords.IClientRepository clientRepository)
+                IDoctorRepository doctorRepository,
+                IClientRepository clientRepository)
             {
                 this.currentUser = currentUser;
                 this.identity = identity;

@@ -1,12 +1,12 @@
 ﻿namespace PetClinic.Application.MedicalRecords.Queries.AllClients
 {
-    using Common.Contracts;
+    using Application.Common.Contracts;
     using MediatR;
     using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Common.ApplicationConstants;
+    using static Application.Common.ApplicationConstants;
 
     public class AllClientsQuery : IRequest<IReadOnlyList<ClientListingsOutputModel>>
     {

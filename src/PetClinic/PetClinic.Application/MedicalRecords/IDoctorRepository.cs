@@ -10,7 +10,7 @@
 
     public interface IDoctorRepository : IRepository<Doctor>
     {
-        Task<DoctorDetailsOutputModel> Details(string userId, CancellationToken cancellationToken = default);
+        Task<DoctorDetailsOutputModel> Details(string userId, string currentUserId, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<DoctorListingsOutputModel>> GetAll(CancellationToken cancellationToken);
         Task<bool> AnyExisting(string userId, CancellationToken cancellationToken = default);
     }

@@ -2,8 +2,11 @@
 {
     using AutoMapper;
 
+    // Cannot add reference from Application to Infrastructure that's why im using this manual mappings instead of the
+    // reflection with IMapFrom
     internal class AutoMapperConfig : Profile
     {
+        // TODO shorten the configs
         public AutoMapperConfig()
         {
             // adoption context
@@ -74,7 +77,6 @@
                 .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.ModifiedOn, opt => opt.Ignore());
 
-            // opt.Ignore() is here because automapper cannot map to Enumerations and Value objects
             // so the actual mapping is by hand in the repository
             this.CreateMap<Infrastructure.Persistence.Models.Pet, Domain.MedicalRecords.Models.Pet>()
                 .ForMember(dest => dest.PetStatusData, opt => opt.MapFrom(src => src.PetStatusData))
@@ -105,15 +107,23 @@
                 .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
                 .ForMember(dest => dest.Pets, opt => opt.MapFrom(src => src.Pets));
 
-            this.CreateMap<Infrastructure.Persistence.Models.Appointment, Application.MedicalRecords.Queries.ClientDetails.AppointmentOutputModel>()
+            this.CreateMap<Infrastructure.Persistence.Models.Appointment, Application.MedicalRecords.Queries.ClientDetails.AppointmentForClientOutputModel>()
                 .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => src.Doctor));
 
             this.CreateMap<Infrastructure.Persistence.Models.Doctor, Application.MedicalRecords.Queries.ClientDetails.DoctorFlatOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.Pet, Application.MedicalRecords.Queries.ClientDetails.PetOutputModel>()
+            this.CreateMap<Infrastructure.Persistence.Models.Pet, Application.MedicalRecords.Queries.Common.PetOutputModel>()
                 .ForMember(dest => dest.PetStatusData, opt => opt.MapFrom(src => src.PetStatusData));
 
-            this.CreateMap<Infrastructure.Persistence.Models.PetStatus, Application.MedicalRecords.Queries.ClientDetails.PetStatusDataOutputModel>();
+            this.CreateMap<Infrastructure.Persistence.Models.PetStatus, Application.MedicalRecords.Queries.Common.PetStatusDataOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Doctor, Application.MedicalRecords.Queries.DoctorDetails.DoctorDetailsOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Appointment, Application.MedicalRecords.Queries.DoctorDetails.AppointmentForDoctorOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.Client, Application.MedicalRecords.Queries.DoctorDetails.ClientFlatOutputModel>();
+
+            this.CreateMap<Infrastructure.Persistence.Models.OfficeRoom, Application.MedicalRecords.Queries.DoctorDetails.OfficeRoomOutputModel>();
         }
 
         internal class ColorConverter : ITypeConverter<Infrastructure.Persistence.Models.Color, Domain.Common.SharedKernel.Color>

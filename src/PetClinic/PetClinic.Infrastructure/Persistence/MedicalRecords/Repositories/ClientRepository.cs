@@ -7,8 +7,10 @@
     using AutoMapper.QueryableExtensions;
     using Common.Persistence;
     using Domain.MedicalRecords.Factories;
+    using Domain.MedicalRecords.Factories.Internal;
     using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
+    using PetClinic.Application.MedicalRecords.Queries.Common;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -44,7 +46,7 @@
             var appointmentsInfo = await this
                 .Data.Set<Appointment>()
                 .Where(a => a.ClientUserId == userId)
-                .ProjectTo<AppointmentOutputModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<AppointmentForClientOutputModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             var petsInfo = await this
@@ -53,8 +55,8 @@
                 .ProjectTo<PetOutputModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            clientInfo.Appointments.AddRange(appointmentsInfo);
-            clientInfo.Pets.AddRange(petsInfo);
+            clientInfo.Appointments = appointmentsInfo;
+            clientInfo.Pets = petsInfo;
 
             return clientInfo;
         }
@@ -123,38 +125,38 @@
             var domainPets = new List<Domain.MedicalRecords.Models.Pet>();
             dbPets.ForEach(el => domainPets.Add(this.mapper.Map<Domain.MedicalRecords.Models.Pet>(el)));
 
-            var domainClient = this.clientFactory
+            var petFactoryActions = new List<Action<PetFactory>>();
+
+            foreach (var domainPet in domainPets)
+            {
+                Action<PetFactory> petFactory = pet => pet
+                    .WithAge(domainPet.Age)
+                    .WithBreed(domainPet.Breed)
+                    .WithColor(domainPet.Color)
+                    .WithColorEye(domainPet.EyeColor)
+                    .WithFoundAt(domainPet.FoundAt)
+                    .WithIsCastrated(domainPet.IsCastrated)
+                    .WithIsAdopted(domainPet.IsAdopted)
+                    .WithName(domainPet.Name)
+                    .WithPetType(domainPet.PetType)
+                    .WithOptionalIdKey(domainPet.Id)
+                    .WithOptionalUserId(domainPet.UserId)
+                    .WithOptionalAuditableData(
+                        domainPet.CreatedBy,
+                        domainPet.CreatedOn,
+                        domainPet.ModifiedBy,
+                        domainPet.ModifiedOn);
+
+                petFactoryActions.Add(petFactory);
+            }
+
+            return this.clientFactory
                 .WithAddress(dbClient.Address!)
                 .WithName(dbClient.Name)
                 .WithPhoneNumber(dbClient.PhoneNumber!)
-                .WithUserId(dbClient.UserId);
-
-            for (int i = 0; i < domainPets.Count; i++)
-            {
-                var domainPet = domainPets[i];
-
-                domainClient
-                    .WithPet(pet => pet
-                        .WithAge(domainPet.Age)
-                        .WithBreed(domainPet.Breed)
-                        .WithColor(domainPet.Color)
-                        .WithColorEye(domainPet.EyeColor)
-                        .WithFoundAt(domainPet.FoundAt)
-                        .WithIsCastrated(domainPet.IsCastrated)
-                        .WithIsAdopted(domainPet.IsAdopted)
-                        .WithName(domainPet.Name)
-                        .WithPetType(domainPet.PetType)
-                        .WithOptionalIdKey(domainPet.Id)
-                        .WithOptionalUserId(domainPet.UserId)
-                        .WithOptionalAuditableData(
-                            domainPet.CreatedBy,
-                            domainPet.CreatedOn,
-                            domainPet.ModifiedBy,
-                            domainPet.ModifiedOn)
-                        .Build());
-            }
-
-            return domainClient.Build();
+                .WithUserId(dbClient.UserId)
+                .WithPets(petFactoryActions)
+                .Build();
         }
 
         // nested mapping with value objects

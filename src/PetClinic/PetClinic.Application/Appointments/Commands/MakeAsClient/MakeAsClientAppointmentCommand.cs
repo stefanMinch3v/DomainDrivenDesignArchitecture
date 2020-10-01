@@ -48,12 +48,10 @@
                     .WithDoctor(doctor => doctor
                         .WithDoctorType(Enumeration.FromValue<DoctorType>(request.DoctorType))
                         .WithName(request.DoctorName)
-                        .WithUserId(request.UserIdDoctor)
-                        .Build())
+                        .WithUserId(request.UserIdDoctor))
                     .WithClient(client => client
                         .WithName(this.currentUser.UserName)
-                        .WithUserId(this.currentUser.UserId)
-                        .Build())
+                        .WithUserId(this.currentUser.UserId))
                     .WithOfficeRoom(request.RoomNumber, Enumeration.FromValue<OfficeRoomType>(1)) // only doctor can assign surgery rooms
                     .WithAppointmentDate(request.StartDate, request.EndDate)
                     .Build();

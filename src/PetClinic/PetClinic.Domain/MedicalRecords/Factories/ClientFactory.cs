@@ -2,6 +2,7 @@
 {
     using Common.Exceptions;
     using Common.SharedKernel;
+    using Internal;
     using Models;
     using System;
     using System.Collections.Generic;
@@ -65,9 +66,10 @@
         {
             this.pets = new List<Pet>();
 
+            var petFactory = new PetFactory();
+
             foreach (var pet in pets)
             {
-                var petFactory = new PetFactory();
                 pet(petFactory);
 
                 this.pets.Add(petFactory.Build());
