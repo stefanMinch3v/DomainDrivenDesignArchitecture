@@ -23,24 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Common\Persistence\Migrations\20200925180343_InitialDatabase.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925180343_InitialDatabase.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181041_InitialDatabase.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181041_InitialDatabase.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181411_InitialDatabase.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181411_InitialDatabase.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181832_InitialDatabase.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200925181832_InitialDatabase.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927090626_AddedNullableAddressPhone.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927090626_AddedNullableAddressPhone.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927090815_AddedNullableAddressPhone.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927090815_AddedNullableAddressPhone.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927091037_AddedNullableAddressAndPhone.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927091037_AddedNullableAddressAndPhone.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927091227_AddedNullableAddressAndPhone.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927091227_AddedNullableAddressAndPhone.Designer.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927093220_UpdatedDoctorClientUserIds.cs" />
-    <Compile Remove="Common\Persistence\Migrations\20200927093220_UpdatedDoctorClientUserIds.Designer.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20201003092407_RecreateInitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20201003092407_RecreateInitialDatabase.Designer.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20201003094218_RecreateInitialDatabase.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20201003094218_RecreateInitialDatabase.Designer.cs" />
   </ItemGroup>
   
   <ItemGroup>

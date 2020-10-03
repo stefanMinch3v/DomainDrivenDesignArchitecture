@@ -18,6 +18,8 @@
 
         public bool IsCastrated { get; set; }
 
+        public bool IsAdopted { get; set; }
+
         public List<PetStatusDataOutputModel> PetStatusData { get; set; } = default!;
     }
 }

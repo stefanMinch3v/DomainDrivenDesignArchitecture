@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    public enum DoctorType
+    public enum DbDoctorType
     {
         Companion = 1,
         Specialist = 2,

@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Pet : AuditableEntity<int>
+    public class Pet : AuditableEntity<int>, IAggregateRoot
     {
         private readonly HashSet<PetStatus> petStatusData;
 
@@ -93,36 +93,44 @@
 
         public IReadOnlyList<PetStatus> PetStatusData => this.petStatusData.ToList().AsReadOnly();
 
-        public void UpdateColor(Color color)
+        public Pet UpdateColor(Color color)
         {
             this.Color = color;
+            return this;
         }
 
-        public void UpdateEyeColor(Color color)
+        public Pet UpdateEyeColor(Color color)
         {
             this.EyeColor = color;
+            return this;
         }
 
-        public void UpdatePetType(PetType petType)
+        public Pet UpdatePetType(PetType petType)
         {
             this.PetType = petType;
+            return this;
         }
 
-        public void UpdateAddress(Address foundAt)
+        public Pet UpdateAddress(Address foundAt)
         {
             this.FoundAt = foundAt;
+            return this;
         }
 
-        public void AddDiagnose(bool isSick, DateTime date, string? diagnose = null)
+        public Pet AddDiagnose(bool isSick, DateTime date, string? diagnose = null)
         {
             var petStatus = new PetStatus(isSick, date, diagnose);
             this.petStatusData.Add(petStatus);
+
+            return this;
         }
 
-        public void UpdateOwner(string userId)
+        public Pet UpdateOwner(string userId)
         {
             Guard.AgainstEmptyString<InvalidPetException>(nameof(userId), userId);
             this.UserId = userId;
+
+            return this;
         }
     }
 }

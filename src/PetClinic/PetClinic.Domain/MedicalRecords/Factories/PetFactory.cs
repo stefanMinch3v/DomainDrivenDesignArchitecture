@@ -5,7 +5,7 @@
     using Models;
     using System;
 
-    public class PetFactory
+    internal class PetFactory : IPetFactory
     {
         private string? userId;
         private int id;
@@ -31,17 +31,15 @@
         private bool isPetTypeSet = false;
         private bool isColorSet = false;
         private bool isEyeColorSet = false;
-        private bool isFoundAtSet = false;
 
-        internal Pet Build()
+        public Pet Build()
         {
             if (!this.isNameSet ||
                 !this.isBreedSet ||
                 !this.isAgeSet ||
                 !this.isPetTypeSet ||
                 !this.isColorSet ||
-                !this.isEyeColorSet ||
-                !this.isFoundAtSet)
+                !this.isEyeColorSet)
             {
                 throw new InvalidPetException("Invalid pet information set.");
             }
@@ -63,15 +61,22 @@
                 pet.Id = this.id;
             }
 
-            pet.CreatedBy = this.createdBy;
-            pet.CreatedOn = this.createdOn;
-            pet.ModifiedBy = this.modifiedBy;
-            pet.ModifiedOn = this.modifiedOn;
+            if (this.createdBy != null)
+            {
+                pet.CreatedBy = this.createdBy;
+                pet.CreatedOn = this.createdOn;
+            }
+
+            if (this.modifiedBy != null)
+            {
+                pet.ModifiedBy = this.modifiedBy;
+                pet.ModifiedOn = this.modifiedOn;
+            }
 
             return pet;
         }
 
-        public PetFactory WithName(string name)
+        public IPetFactory WithName(string name)
         {
             this.name = name;
             this.isNameSet = true;
@@ -79,7 +84,7 @@
             return this;
         }
 
-        public PetFactory WithBreed(string breed)
+        public IPetFactory WithBreed(string breed)
         {
             this.breed = breed;
             this.isBreedSet = true;
@@ -87,7 +92,7 @@
             return this;
         }
 
-        public PetFactory WithAge(int age)
+        public IPetFactory WithAge(int age)
         {
             this.age = age;
             this.isAgeSet = true;
@@ -95,24 +100,22 @@
             return this;
         }
 
-        public PetFactory WithIsCastrated(bool isCastrated)
+        public IPetFactory WithCastration(bool isCastrated)
         {
             this.isCastrated = isCastrated;
             return this;
         }
 
-        public PetFactory WithFoundAt(Address foundAt)
+        public IPetFactory WithFoundAt(Address foundAt)
         {
             this.foundAt = foundAt;
-            this.isFoundAtSet = true;
-
             return this;
         }
 
-        public PetFactory WithFoundAt(string foundAt)
+        public IPetFactory WithFoundAt(string foundAt)
             => this.WithFoundAt(foundAt);
 
-        public PetFactory WithColor(Color color)
+        public IPetFactory WithColor(Color color)
         {
             this.color = color;
             this.isColorSet = true;
@@ -120,7 +123,7 @@
             return this;
         }
 
-        public PetFactory WithColorEye(Color eyeColor)
+        public IPetFactory WithEyeColor(Color eyeColor)
         {
             this.eyeColor = eyeColor;
             this.isEyeColorSet = true;
@@ -128,7 +131,7 @@
             return this;
         }
 
-        public PetFactory WithPetType(PetType petType)
+        public IPetFactory WithPetType(PetType petType)
         {
             this.petType = petType;
             this.isPetTypeSet = true;
@@ -136,25 +139,25 @@
             return this;
         }
 
-        public PetFactory WithIsAdopted(bool isAdopted)
+        public IPetFactory WithIsAdopted(bool isAdopted)
         {
             this.isAdopted = isAdopted;
             return this;
         }
 
-        public PetFactory WithOptionalIdKey(int id)
+        public IPetFactory WithOptionalIdKey(int id)
         {
             this.id = id;
             return this;
         }
 
-        public PetFactory WithOptionalUserId(string? userId)
+        public IPetFactory WithOptionalUserId(string? userId)
         {
             this.userId = userId;
             return this;
         }
 
-        public PetFactory WithOptionalAuditableData(
+        public IPetFactory WithOptionalAuditableData(
             string createdBy,
             DateTime createdOn,
             string? modifiedBy,

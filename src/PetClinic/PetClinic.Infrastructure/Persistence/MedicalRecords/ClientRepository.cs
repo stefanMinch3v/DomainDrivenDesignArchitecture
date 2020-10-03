@@ -1,23 +1,24 @@
-﻿namespace PetClinic.Infrastructure.Persistence.MedicalRecords.Repositories
+﻿namespace PetClinic.Infrastructure.Persistence.MedicalRecords
 {
     using Application.MedicalRecords;
     using Application.MedicalRecords.Queries.AllClients;
     using Application.MedicalRecords.Queries.ClientDetails;
+    using Application.MedicalRecords.Queries.Common;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Common.Persistence;
+    using Domain.Common.SharedKernel;
     using Domain.MedicalRecords.Factories;
-    using Domain.MedicalRecords.Factories.Internal;
+    using Domain.MedicalRecords.Models;
     using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
-    using PetClinic.Application.MedicalRecords.Queries.Common;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class ClientRepository : DataRepository<Client>, IClientRepository
+    internal class ClientRepository : DataRepository<DbClient>, IClientRepository
     {
         private readonly IMapper mapper;
         private readonly IClientFactory clientFactory;
@@ -44,13 +45,13 @@
                 .FirstOrDefaultAsync(cancellationToken);
 
             var appointmentsInfo = await this
-                .Data.Set<Appointment>()
+                .Data.Set<DbAppointment>()
                 .Where(a => a.ClientUserId == userId)
                 .ProjectTo<AppointmentForClientOutputModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             var petsInfo = await this
-                .Data.Set<Pet>()
+                .Data.Set<DbPet>()
                 .Where(a => a.UserId == userId)
                 .ProjectTo<PetOutputModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
@@ -65,12 +66,36 @@
             string userId, 
             string currentUserId, 
             CancellationToken cancellationToken = default)
-            => await this.mapper
-                .ProjectTo<ClientDetailsOutputModel>(this
-                    .All()
-                    .Where(c => c.UserId == userId && c.UserId == currentUserId)
-                    .Include(c => c.Appointments))
-                .FirstOrDefaultAsync(cancellationToken);
+        {
+            var client = await base
+                .All()
+                .ProjectTo<ClientDetailsOutputModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.UserId == currentUserId, cancellationToken);
+
+            if (client is null)
+            {
+                return null!;
+            }
+
+            var appointments = await base
+                .Data
+                .Set<DbAppointment>()
+                .Where(a => a.ClientUserId == userId)
+                .ProjectTo<AppointmentForClientOutputModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            var pets = await base
+                .Data
+                .Set<DbPet>()
+                .Where(p => p.UserId == userId)
+                .ProjectTo<PetOutputModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            client.Pets = pets;
+            client.Appointments = appointments;
+
+            return client;
+        }
 
         public async Task<IReadOnlyList<ClientListingsOutputModel>> GetAll(CancellationToken cancellationToken = default)
             => await this.mapper
@@ -83,21 +108,21 @@
                 .SingleOrDefaultAsync(c => c.UserId == userId, cancellationToken))
                 ?.Id ?? 0;
 
-        public async Task Save(Domain.MedicalRecords.Models.Client entity, CancellationToken cancellationToken = default)
+        public async Task Save(Client entity, CancellationToken cancellationToken = default)
         {
-            var dbEntity = this.mapper.Map<Client>(entity);
+            var dbClient = this.mapper.Map<DbClient>(entity);
 
-            this.MapTo(dbEntity, entity);
+            this.MapTo(dbClient, entity);
 
-            this.Data.Update(dbEntity);
+            this.Data.Update(dbClient);
 
             await this.Data.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<Domain.MedicalRecords.Models.Client> Single(string userId, CancellationToken cancellationToken = default)
+        public Task<Client> Single(string userId, CancellationToken cancellationToken = default)
             => this.Find(userId, cancellationToken);
 
-        private async Task<Domain.MedicalRecords.Models.Client> Find(
+        private async Task<Client> Find(
             string userId, 
             CancellationToken cancellationToken = default)
         {
@@ -115,27 +140,27 @@
 
             var dbPets = await base
                 .Data
-                .Set<Pet>()
+                .Set<DbPet>()
                 .Where(p => p.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
             // if I dont map it to domain pet I get -1073741819 (0xc0000005) 'Access violation'.
             // couldn't figure it out why because cannot catch the exception
-            var domainPets = new List<Domain.MedicalRecords.Models.Pet>();
-            dbPets.ForEach(el => domainPets.Add(this.mapper.Map<Domain.MedicalRecords.Models.Pet>(el)));
+            var domainPets = new List<Pet>();
+            dbPets.ForEach(el => domainPets.Add(this.mapper.Map<Pet>(el)));
 
-            var petFactoryActions = new List<Action<PetFactory>>();
+            var petFactoryActions = new List<Action<IPetFactory>>();
 
             foreach (var domainPet in domainPets)
             {
-                Action<PetFactory> petFactory = pet => pet
+                Action<IPetFactory> petFactory = pet => pet
                     .WithAge(domainPet.Age)
                     .WithBreed(domainPet.Breed)
                     .WithColor(domainPet.Color)
-                    .WithColorEye(domainPet.EyeColor)
+                    .WithEyeColor(domainPet.EyeColor)
                     .WithFoundAt(domainPet.FoundAt)
-                    .WithIsCastrated(domainPet.IsCastrated)
+                    .WithCastration(domainPet.IsCastrated)
                     .WithIsAdopted(domainPet.IsAdopted)
                     .WithName(domainPet.Name)
                     .WithPetType(domainPet.PetType)
@@ -156,14 +181,35 @@
                 .WithPhoneNumber(dbClient.PhoneNumber!)
                 .WithUserId(dbClient.UserId)
                 .WithPets(petFactoryActions)
+                .WithOptionalAuditableData(
+                    dbClient.CreatedBy, 
+                    dbClient.CreatedOn, 
+                    dbClient.ModifiedBy, 
+                    dbClient.ModifiedOn)
+                .WithOptionalIdKey(dbClient.Id)
                 .Build();
+        }
+
+        private void MapPets(DbClient dbClient, IReadOnlyList<Pet> pets)
+        {
+            var dbPets = new List<DbPet>();
+
+            foreach (var pet in pets)
+            {
+                var dbPet = this.mapper.Map<DbPet>(pet);
+                dbPets.Add(dbPet);
+            }
+
+            dbClient.Pets = dbPets;
         }
 
         // nested mapping with value objects
         private void MapTo(
-            Client dbClient,
-            Domain.MedicalRecords.Models.Client domainClient)
+            DbClient dbClient,
+            Client domainClient)
         {
+            this.MapPets(dbClient, domainClient.Pets);
+
             for (int i = 0; i < domainClient.Pets.Count; i++)
             {
                 var domainPet = domainClient.Pets[i];
@@ -174,15 +220,16 @@
         }
 
         private void MapTo(
-            ICollection<PetStatus> dbPetStatus, 
-            IReadOnlyList<Domain.Common.SharedKernel.PetStatus> domainPetStatus)
+            ICollection<DbPetStatus> dbPetStatus, 
+            IReadOnlyList<PetStatus> domainPetStatus)
             => domainPetStatus
                 .ToList()
-                .ForEach(d => dbPetStatus.Add(new PetStatus
+                .ForEach(d => dbPetStatus.Add(new DbPetStatus
                 {
                     Date = d.Date,
                     Diagnose = d.Diagnose,
                     IsSick = d.IsSick
                 }));
+
     }
 }

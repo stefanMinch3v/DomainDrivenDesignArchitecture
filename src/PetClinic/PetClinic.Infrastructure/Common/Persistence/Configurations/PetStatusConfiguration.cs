@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class PetStatusConfiguration : IEntityTypeConfiguration<PetStatus>
+    internal class PetStatusConfiguration : IEntityTypeConfiguration<DbPetStatus>
     {
-        public void Configure(EntityTypeBuilder<PetStatus> builder)
+        public void Configure(EntityTypeBuilder<DbPetStatus> builder)
         {
             builder
                 .HasKey(ps => ps.Id);

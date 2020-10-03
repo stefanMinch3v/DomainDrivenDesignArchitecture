@@ -10,8 +10,8 @@ using PetClinic.Infrastructure.Common.Persistence;
 namespace PetClinic.Infrastructure.Common.Persistence.Migrations
 {
     [DbContext(typeof(PetClinicDbContext))]
-    [Migration("20200925183927_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20201003094429_RecreateInitialDatabase")]
+    partial class RecreateInitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -217,7 +217,7 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Appointment", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbAppointment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,14 +227,32 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ClientUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("DoctorUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OfficeRoomId")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -248,7 +266,7 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Client", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbClient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -256,15 +274,26 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -276,7 +305,7 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Doctor", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbDoctor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,18 +313,29 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DoctorType")
                         .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -307,7 +347,7 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.OfficeRoom", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbOfficeRoom", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,8 +357,21 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -334,7 +387,7 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.ToTable("OfficeRooms");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Pet", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbPet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,10 +401,17 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("Color")
                         .HasColumnType("int");
 
-                    b.Property<int>("Color")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DbClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("EyeColor")
@@ -367,6 +427,12 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                     b.Property<bool>("IsCastrated")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -379,17 +445,24 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("DbClientId");
 
                     b.ToTable("Pets");
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.PetStatus", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbPetStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -399,6 +472,12 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
 
                     b.Property<bool>("IsSick")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PetId")
                         .HasColumnType("int");
@@ -461,41 +540,41 @@ namespace PetClinic.Infrastructure.Common.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Appointment", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbAppointment", b =>
                 {
-                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.Client", "Client")
+                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.DbClient", "Client")
                         .WithMany("Appointments")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.Doctor", "Doctor")
+                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.DbDoctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.OfficeRoom", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbOfficeRoom", b =>
                 {
-                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.Appointment", null)
+                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.DbAppointment", null)
                         .WithOne("OfficeRoom")
-                        .HasForeignKey("PetClinic.Infrastructure.Persistence.Models.OfficeRoom", "AppointmentId")
+                        .HasForeignKey("PetClinic.Infrastructure.Persistence.Models.DbOfficeRoom", "AppointmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.Pet", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbPet", b =>
                 {
-                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.Client", null)
+                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.DbClient", null)
                         .WithMany("Pets")
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("DbClientId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.PetStatus", b =>
+            modelBuilder.Entity("PetClinic.Infrastructure.Persistence.Models.DbPetStatus", b =>
                 {
-                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.Pet", null)
+                    b.HasOne("PetClinic.Infrastructure.Persistence.Models.DbPet", null)
                         .WithMany("PetStatusData")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Restrict)

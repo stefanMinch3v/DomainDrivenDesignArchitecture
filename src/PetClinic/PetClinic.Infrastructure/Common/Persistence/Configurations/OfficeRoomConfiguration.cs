@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class OfficeRoomConfiguration : IEntityTypeConfiguration<OfficeRoom>
+    internal class OfficeRoomConfiguration : IEntityTypeConfiguration<DbOfficeRoom>
     {
-        public void Configure(EntityTypeBuilder<OfficeRoom> builder)
+        public void Configure(EntityTypeBuilder<DbOfficeRoom> builder)
         {
             builder
                 .HasKey(or => or.Id);

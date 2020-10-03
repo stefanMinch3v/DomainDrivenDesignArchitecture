@@ -1,9 +1,9 @@
-﻿namespace PetClinic.Infrastructure.Common.Persistence.Migrations
-{
-    using System;
-    using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-    public partial class InitialDatabase : Migration
+namespace PetClinic.Infrastructure.Common.Persistence.Migrations
+{
+    public partial class RecreateInitialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,10 +52,14 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false)
+                    Address = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,11 +72,15 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     DoctorType = table.Column<int>(nullable: false),
-                    Address = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false)
+                    Address = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -191,6 +199,10 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     PetType = table.Column<int>(nullable: false),
                     Breed = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
@@ -201,14 +213,14 @@
                     IsCastrated = table.Column<bool>(nullable: false),
                     IsAdopted = table.Column<bool>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
-                    ClientId = table.Column<int>(nullable: true)
+                    DbClientId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pets_Clients_ClientId",
-                        column: x => x.ClientId,
+                        name: "FK_Pets_Clients_DbClientId",
+                        column: x => x.DbClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -220,11 +232,16 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    DoctorUserId = table.Column<string>(nullable: false),
+                    ClientUserId = table.Column<string>(nullable: false),
                     DoctorId = table.Column<int>(nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    OfficeRoomId = table.Column<int>(nullable: false)
+                    EndDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,6 +266,10 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     PetId = table.Column<int>(nullable: false),
                     IsSick = table.Column<bool>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
@@ -271,6 +292,10 @@
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedBy = table.Column<string>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     AppointmentId = table.Column<int>(nullable: false),
                     IsAvailable = table.Column<bool>(nullable: false),
                     OfficeRoomType = table.Column<int>(nullable: false),
@@ -343,9 +368,9 @@
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_ClientId",
+                name: "IX_Pets_DbClientId",
                 table: "Pets",
-                column: "ClientId");
+                column: "DbClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PetStatus_PetId",

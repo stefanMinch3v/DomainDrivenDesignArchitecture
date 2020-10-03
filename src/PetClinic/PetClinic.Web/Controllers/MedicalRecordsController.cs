@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Web.Controllers
 {
     using Application.MedicalRecords.Commands.AddDiagnose;
+    using Application.MedicalRecords.Commands.AddPet;
     using Application.MedicalRecords.Queries.AllClients;
     using Application.MedicalRecords.Queries.AllDoctors;
     using Application.MedicalRecords.Queries.ClientDetails;
@@ -34,6 +35,11 @@
         [HttpPost]
         [Route(nameof(AddDiagnose))]
         public async Task<ActionResult> AddDiagnose(AddDiagnoseCommand command)
+            => await base.Send(command);
+
+        [HttpPost]
+        [Route(nameof(AddPet))]
+        public async Task<ActionResult> AddPet([FromBody] AddPetCommand command)
             => await base.Send(command);
     }
 }

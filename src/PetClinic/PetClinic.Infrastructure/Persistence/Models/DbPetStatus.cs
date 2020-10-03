@@ -3,7 +3,7 @@
     using Domain.Common;
     using System;
 
-    public class PetStatus : AuditableEntity<int>
+    public class DbPetStatus : AuditableEntity<int>
     {
         public int PetId { get; set; }
 

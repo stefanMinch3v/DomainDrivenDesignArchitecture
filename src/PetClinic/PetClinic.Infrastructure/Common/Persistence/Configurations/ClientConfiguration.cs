@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class ClientConfiguration : IEntityTypeConfiguration<Client>
+    internal class ClientConfiguration : IEntityTypeConfiguration<DbClient>
     {
-        public void Configure(EntityTypeBuilder<Client> builder)
+        public void Configure(EntityTypeBuilder<DbClient> builder)
         {
             builder
                 .HasKey(c => c.Id);

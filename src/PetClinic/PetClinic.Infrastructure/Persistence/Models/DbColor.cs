@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    public enum Color
+    public enum DbColor
     {
         Red = 1,
         Black = 2,

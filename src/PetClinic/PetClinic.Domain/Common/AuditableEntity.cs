@@ -13,7 +13,7 @@
         public string CreatedBy
         {
             get => this.createdBy;
-            set => this.createdBy = value ?? throw new InvalidEntityException(UserErrorMsg);
+            set => this.createdBy = value!;
         }
 
         public DateTime CreatedOn { get; set; }
@@ -21,7 +21,7 @@
         public string? ModifiedBy
         {
             get => this.modifiedBy;
-            set => this.modifiedBy = value ?? throw new InvalidEntityException(UserErrorMsg);
+            set => this.modifiedBy = value!;
         }
 
         public DateTime? ModifiedOn { get; set; }

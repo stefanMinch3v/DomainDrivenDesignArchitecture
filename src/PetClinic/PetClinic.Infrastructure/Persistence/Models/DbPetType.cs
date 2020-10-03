@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Infrastructure.Persistence.Models
 {
-    public enum PetType
+    public enum DbPetType
     {
         Cat = 1,
         Dog = 2,

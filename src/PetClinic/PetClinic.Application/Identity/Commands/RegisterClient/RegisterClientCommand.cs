@@ -1,11 +1,14 @@
 ﻿namespace PetClinic.Application.Identity.Commands.RegisterClient
 {
+    using Application.MedicalRecords;
     using Common;
     using Common.Contracts;
+    using Domain.MedicalRecords.Factories;
     using MediatR;
-    using PetClinic.Domain.MedicalRecords.Factories;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using static Common.ApplicationConstants;
 
     public class RegisterClientCommand : IRequest<Result>
     {
@@ -24,37 +27,27 @@
             private readonly ICurrentUser currentUser;
             private readonly IIdentity identity;
             private readonly IClientFactory clientFactory;
-            private readonly MedicalRecords.IClientRepository clientRepository;
-            private readonly MedicalRecords.IDoctorRepository doctorRepository;
+            private readonly IClientRepository clientRepository;
 
             public RegisterClientCommandHandler(
                 ICurrentUser currentUser, 
                 IIdentity identity,
-
                 IClientFactory clientFactory,
-                MedicalRecords.IClientRepository clientRepository,
-                MedicalRecords.IDoctorRepository doctorRepository)
+                IClientRepository clientRepository)
             {
                 this.currentUser = currentUser;
                 this.identity = identity;
                 this.clientFactory = clientFactory;
                 this.clientRepository = clientRepository;
-                this.doctorRepository = doctorRepository;
             }
 
             public async Task<Result> Handle(RegisterClientCommand request, CancellationToken cancellationToken)
             {
-                var existingClientTask = this.clientRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
-                var existingDoctorTask = this.doctorRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
+                var existingClient = await this.clientRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
 
-                await Task.WhenAll(existingClientTask, existingDoctorTask);
-
-                var existingClientResult = await existingClientTask;
-                var existingDoctorResult = await existingDoctorTask;
-
-                if (existingClientResult || existingDoctorResult)
+                if (existingClient)
                 {
-                    return "There is already an existing member with this account!";
+                    return InvalidMessages.ExistingMember;
                 }
 
                 var client = this.clientFactory
@@ -64,7 +57,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
-                await this.clientRepository.Save(client, cancellationToken: cancellationToken);
+                await this.clientRepository.Save(client, cancellationToken);
                 await this.identity.AddToRoleClient(this.currentUser.UserId);
 
                 return Result.Success;

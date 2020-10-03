@@ -2,7 +2,6 @@
 {
     using Common;
     using Common.SharedKernel;
-    using Internal;
     using Models;
     using System;
     using System.Collections.Generic;
@@ -21,8 +20,16 @@
 
         IClientFactory WithPhoneNumber(string phoneNumber);
 
-        IClientFactory WithPets(IList<Action<PetFactory>> pets);
+        IClientFactory WithPets(IList<Action<IPetFactory>> pets);
 
-        IClientFactory WithPet(Action<PetFactory> pet);
+        IClientFactory WithPet(Action<IPetFactory> pet);
+
+        IClientFactory WithOptionalIdKey(int id);
+
+        IClientFactory WithOptionalAuditableData(
+            string createdBy,
+            DateTime createdOn,
+            string? modifiedBy,
+            DateTime? modifiedOn);
     }
 }

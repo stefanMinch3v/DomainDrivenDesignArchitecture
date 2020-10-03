@@ -5,10 +5,12 @@
     using Common.Contracts;
     using Domain.Common;
     using Domain.Common.SharedKernel;
+    using Domain.MedicalRecords.Factories;
     using MediatR;
-    using PetClinic.Domain.MedicalRecords.Factories;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using static Common.ApplicationConstants;
 
     public class RegisterDoctorCommand : IRequest<Result>
     {
@@ -31,36 +33,26 @@
             private readonly IIdentity identity;
             private readonly IDoctorFactory doctorFactory;
             private readonly IDoctorRepository doctorRepository;
-            private readonly IClientRepository clientRepository;
 
             public RegisterDoctorCommandHandler(
                 ICurrentUser currentUser,
                 IIdentity identity,
                 IDoctorFactory doctorFactory,
-                IDoctorRepository doctorRepository,
-                IClientRepository clientRepository)
+                IDoctorRepository doctorRepository)
             {
                 this.currentUser = currentUser;
                 this.identity = identity;
                 this.doctorFactory = doctorFactory;
                 this.doctorRepository = doctorRepository;
-                this.clientRepository = clientRepository;
             }
 
             public async Task<Result> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
             {
-                // TODO move this in medical records context
-                var existingClientTask = this.clientRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
-                var existingDoctorTask = this.doctorRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
+                var existingDoctor = await this.doctorRepository.AnyExisting(this.currentUser.UserId, cancellationToken);
 
-                await Task.WhenAll(existingClientTask, existingDoctorTask);
-
-                var existingClientResult = await existingClientTask;
-                var existingDoctorResult = await existingDoctorTask;
-
-                if (existingClientResult || existingDoctorResult)
+                if (existingDoctor)
                 {
-                    return "There is already an existing member with this account!";
+                    return InvalidMessages.ExistingMember;
                 }
 
                 var doctor = this.doctorFactory
@@ -71,7 +63,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
-                await this.doctorRepository.Save(doctor, cancellationToken: cancellationToken);
+                await this.doctorRepository.Save(doctor, cancellationToken);
                 await this.identity.AddToRoleDoctor(this.currentUser.UserId);
 
                 return Result.Success;

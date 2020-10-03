@@ -25,7 +25,7 @@
 
         public async Task<Result> Register(RegisterUserCommand userInput)
         {
-            var user = new User(userInput.Email, userInput.Name);
+            var user = new User(userInput.Email, userInput.UserName);
 
             var existingUser = await userManager.FindByEmailAsync(userInput.Email);
             if (existingUser != null)

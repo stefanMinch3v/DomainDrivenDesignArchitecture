@@ -4,6 +4,7 @@
     using Application.Adoptions.Queries.GetAllPets;
     using Application.Adoptions.Queries.PetDetails;
     using Microsoft.AspNetCore.Mvc;
+    using PetClinic.Application.Adoptions.Commands.AddPet;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -18,6 +19,11 @@
         [Route(nameof(AdoptPet))]
         public async Task<ActionResult> AdoptPet(int id)
             => await base.Send(new AdoptPetCommand(id));
+
+        [HttpPost]
+        [Route(nameof(Add))]
+        public async Task<ActionResult> Add(AddPetCommand command)
+            => await base.Send(command);
 
         [HttpGet]
         [Route(nameof(DetailsPet))]

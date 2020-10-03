@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Infrastructure.Persistence.Adoptions.Repositories
+﻿namespace PetClinic.Infrastructure.Persistence.Adoptions
 {
     using Application.Adoptions;
     using Application.Adoptions.Queries.GetAllPets;
@@ -6,6 +6,8 @@
     using AutoMapper;
     using Common.Persistence;
     using Domain.Adoptions.Factories;
+    using Domain.Adoptions.Models;
+    using Domain.Common.SharedKernel;
     using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using PetClinic.Domain.Common;
@@ -14,7 +16,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class AdoptionRepository : DataRepository<Pet>, IAdoptionRepository
+    internal class AdoptionRepository : DataRepository<DbPet>, IAdoptionRepository
     {
         private readonly IMapper mapper;
         private readonly IPetFactory petFactory;
@@ -35,10 +37,10 @@
                     .WithAge(pet.Age)
                     .WithBreed(pet.Breed)
                     .WithCastration(pet.IsCastrated)
-                    .WithColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.Color))
-                    .WithEyeColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)pet.EyeColor))
-                    .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)pet.PetType))
-                    .WithFoundAt(pet.FoundAt)
+                    .WithColor(Enumeration.FromValue<Color>((int)pet.Color))
+                    .WithEyeColor(Enumeration.FromValue<Color>((int)pet.EyeColor))
+                    .WithPetType(Enumeration.FromValue<PetType>((int)pet.PetType))
+                    .WithFoundAt(pet.FoundAt!)
                     .WithName(pet.Name)
                     .WithOptionalKeyId(pet.Id)
                     .Build())
@@ -53,25 +55,24 @@
             return this.mapper.Map<PetDetailsOutputModel>(domainPet);
         }
 
-        public Task<Domain.Adoptions.Models.Pet> GetPet(int id, CancellationToken cancellationToken = default)
+        public Task<Pet> GetPet(int id, CancellationToken cancellationToken = default)
             => this.Find(id, cancellationToken);
 
-
-        public async Task Save(Domain.Adoptions.Models.Pet entity, CancellationToken cancellationToken = default)
+        public async Task Save(Pet entity, CancellationToken cancellationToken = default)
         {
-            var dbEntity = this.mapper.Map<Pet>(entity);
+            var dbEntity = this.mapper.Map<DbPet>(entity);
 
             this.Data.Update(dbEntity);
 
             await this.Data.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<Domain.Adoptions.Models.Pet> Find(int id, CancellationToken cancellationToken = default)
+        private async Task<Pet> Find(int id, CancellationToken cancellationToken = default)
         {
             var dbPet = await base
                 .All()
                 .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
+                .SingleOrDefaultAsync(p => p.Id == id && p.UserId == null, cancellationToken);
 
             if (dbPet is null)
             {
@@ -82,10 +83,10 @@
                 .WithAge(dbPet.Age)
                 .WithBreed(dbPet.Breed)
                 .WithCastration(dbPet.IsCastrated)
-                .WithColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)dbPet.Color))
-                .WithEyeColor(Enumeration.FromValue<Domain.Common.SharedKernel.Color>((int)dbPet.EyeColor))
-                .WithPetType(Enumeration.FromValue<Domain.Common.SharedKernel.PetType>((int)dbPet.PetType))
-                .WithFoundAt(dbPet.FoundAt)
+                .WithColor(Enumeration.FromValue<Color>((int)dbPet.Color))
+                .WithEyeColor(Enumeration.FromValue<Color>((int)dbPet.EyeColor))
+                .WithPetType(Enumeration.FromValue<PetType>((int)dbPet.PetType))
+                .WithFoundAt(dbPet.FoundAt!)
                 .WithName(dbPet.Name)
                 .WithOptionalCreatedByOn(dbPet.CreatedBy, dbPet.CreatedOn)
                 .WithOptionalKeyId(dbPet.Id)

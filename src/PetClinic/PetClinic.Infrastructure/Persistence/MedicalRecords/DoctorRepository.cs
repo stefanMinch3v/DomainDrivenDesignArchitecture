@@ -1,20 +1,21 @@
-﻿namespace PetClinic.Infrastructure.Persistence.MedicalRecords.Repositories
+﻿namespace PetClinic.Infrastructure.Persistence.MedicalRecords
 {
-    using Persistence.Models;
     using Application.MedicalRecords;
     using Application.MedicalRecords.Queries.AllDoctors;
+    using Application.MedicalRecords.Queries.Common;
     using Application.MedicalRecords.Queries.DoctorDetails;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Common.Persistence;
+    using Domain.MedicalRecords.Models;
     using Microsoft.EntityFrameworkCore;
+    using Persistence.Models;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using AutoMapper.QueryableExtensions;
-    using PetClinic.Application.MedicalRecords.Queries.Common;
 
-    internal class DoctorRepository : DataRepository<Doctor>, IDoctorRepository
+    internal class DoctorRepository : DataRepository<DbDoctor>, IDoctorRepository
     {
         private readonly IMapper mapper;
 
@@ -44,7 +45,8 @@
             }
 
             var appointments = await this
-                .Data.Set<Appointment>()
+                .Data
+                .Set<DbAppointment>()
                 .Where(a => a.DoctorUserId == userId)
                 .ProjectTo<AppointmentForDoctorOutputModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
@@ -52,7 +54,8 @@
             foreach (var appointment in appointments)
             {
                 var client = await this
-                    .Data.Set<Client>()
+                    .Data
+                    .Set<DbClient>()
                     .Where(a => a.UserId == appointment.Client.UserId)
                     .ProjectTo<ClientFlatOutputModel>(this.mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);
@@ -60,7 +63,8 @@
                 if (client != null)
                 {
                     var pets = await this
-                        .Data.Set<Pet>()
+                        .Data
+                        .Set<DbPet>()
                         .Where(a => a.UserId == client.UserId)
                         .ProjectTo<PetOutputModel>(this.mapper.ConfigurationProvider)
                         .ToListAsync(cancellationToken);
@@ -81,9 +85,9 @@
                 .ProjectTo<DoctorListingsOutputModel>(this.All())
                 .ToListAsync(cancellationToken);
 
-        public async Task Save(Domain.MedicalRecords.Models.Doctor entity, CancellationToken cancellationToken = default)
+        public async Task Save(Doctor entity, CancellationToken cancellationToken = default)
         {
-            var dbEntity = this.mapper.Map<Doctor>(entity);
+            var dbEntity = this.mapper.Map<DbDoctor>(entity);
 
             this.Data.Update(dbEntity);
 

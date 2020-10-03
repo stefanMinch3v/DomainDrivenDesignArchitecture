@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
+    internal class DoctorConfiguration : IEntityTypeConfiguration<DbDoctor>
     {
-        public void Configure(EntityTypeBuilder<Doctor> builder)
+        public void Configure(EntityTypeBuilder<DbDoctor> builder)
         {
             builder
                 .HasKey(d => d.Id);

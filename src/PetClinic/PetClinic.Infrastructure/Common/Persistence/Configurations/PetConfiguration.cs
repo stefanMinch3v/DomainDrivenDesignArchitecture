@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class PetConfiguration : IEntityTypeConfiguration<Pet>
+    internal class PetConfiguration : IEntityTypeConfiguration<DbPet>
     {
-        public void Configure(EntityTypeBuilder<Pet> builder)
+        public void Configure(EntityTypeBuilder<DbPet> builder)
         {
             builder
                 .HasKey(p => p.Id);
@@ -29,7 +29,7 @@
 
             builder
                 .Property(p => p.FoundAt)
-                .IsRequired();
+                .IsRequired(false);
 
             builder
                 .Property(p => p.IsAdopted)

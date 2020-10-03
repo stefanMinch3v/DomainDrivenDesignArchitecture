@@ -1,11 +1,13 @@
-﻿namespace PetClinic.Infrastructure.Persistence.Appointments.Repositories
+﻿namespace PetClinic.Infrastructure.Persistence.Appointments
 {
     using Application.Appointments;
     using Application.Appointments.Queries.GetAll;
     using AutoMapper;
     using Common.Persistence;
     using Domain.Appointments.Factories;
+    using Domain.Appointments.Models;
     using Domain.Common;
+    using Domain.Common.SharedKernel;
     using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -13,7 +15,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class AppointmentRepository : DataRepository<Appointment>, IAppointmentRepository
+    internal class AppointmentRepository : DataRepository<DbAppointment>, IAppointmentRepository
     {
         private readonly IMapper mapper;
         private readonly IAppointmentFactory appointmentFactory;
@@ -69,9 +71,9 @@
             return true;
         }
 
-        public async Task Save(Domain.Appointments.Models.Appointment entity, CancellationToken cancellationToken = default)
+        public async Task Save(Appointment entity, CancellationToken cancellationToken = default)
         {
-            var dbEntity = this.mapper.Map<Appointment>(entity);
+            var dbEntity = this.mapper.Map<DbAppointment>(entity);
 
             this.Data.Update(dbEntity);
 
@@ -80,7 +82,7 @@
 
         // cannot make the factory before ToListAsync as it is in the adoption repository cuz here the linq query is too
         // complex and ef core throws an exception
-        private async Task<IReadOnlyList<Domain.Appointments.Models.Appointment>> GetAllDomain(
+        private async Task<IReadOnlyList<Appointment>> GetAllDomain(
             string userId,
             CancellationToken cancellationToken = default)
             => (await base
@@ -95,7 +97,7 @@
                 .Select(a => this.appointmentFactory
                     .WithDoctor(doctor => doctor
                         .WithDoctorType(
-                            Enumeration.FromValue<Domain.Common.SharedKernel.DoctorType>((int)a.Doctor.DoctorType))
+                            Enumeration.FromValue<DoctorType>((int)a.Doctor.DoctorType))
                         .WithName(a.Doctor.Name)
                         .WithUserId(a.DoctorUserId))
                     .WithClient(client => client
@@ -103,7 +105,7 @@
                         .WithUserId(a.ClientUserId))
                     .WithOfficeRoom(
                         a.OfficeRoom.Number,
-                        Enumeration.FromValue<Domain.Appointments.Models.OfficeRoomType>((int)a.OfficeRoom.OfficeRoomType))
+                        Enumeration.FromValue<OfficeRoomType>((int)a.OfficeRoom.OfficeRoomType))
                     .WithAppointmentDate(a.StartDate, a.EndDate)
                     .Build())
                 .ToList();

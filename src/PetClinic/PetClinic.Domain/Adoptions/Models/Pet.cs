@@ -65,9 +65,12 @@
 
         public string? UserId { get; private set; }
 
+        public bool IsAdopted { get; private set; }
+
         public void AddToOwner(string ownerId)
         {
             this.UserId = ownerId;
+            this.IsAdopted = true;
             // send message to medical records with current pet data so it will be attached to the owner
         }
     }

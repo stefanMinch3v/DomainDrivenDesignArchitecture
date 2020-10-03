@@ -33,17 +33,17 @@
             this.savesChangesTracker = new Stack<object>();
         }
 
-        public DbSet<Pet> Pets { get; set; } = default!;
+        public DbSet<DbPet> Pets { get; set; } = default!;
 
-        public DbSet<Appointment> Appointments { get; set; } = default!;
+        public DbSet<DbAppointment> Appointments { get; set; } = default!;
 
-        public DbSet<Client> Clients { get; set; } = default!;
+        public DbSet<DbClient> Clients { get; set; } = default!;
 
-        public DbSet<OfficeRoom> OfficeRooms { get; set; } = default!;
+        public DbSet<DbOfficeRoom> OfficeRooms { get; set; } = default!;
 
-        public DbSet<Doctor> Doctors { get; set; } = default!;
+        public DbSet<DbDoctor> Doctors { get; set; } = default!;
 
-        public DbSet<PetStatus> PetStatus { get; set; } = default!;
+        public DbSet<DbPetStatus> PetStatus { get; set; } = default!;
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -97,7 +97,6 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             base.OnModelCreating(builder);
         }
 

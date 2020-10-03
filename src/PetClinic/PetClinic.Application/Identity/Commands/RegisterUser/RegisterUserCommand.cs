@@ -10,13 +10,13 @@
         public RegisterUserCommand(
             string email, 
             string password, 
-            string name)
+            string userName)
             : base(email, password)
         {
-            this.Name = name;
+            this.UserName = userName;
         }
 
-        public string Name { get; }
+        public string UserName { get; }
 
         public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result>
         {

@@ -4,9 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
+    internal class AppointmentConfiguration : IEntityTypeConfiguration<DbAppointment>
     {
-        public void Configure(EntityTypeBuilder<Appointment> builder)
+        public void Configure(EntityTypeBuilder<DbAppointment> builder)
         {
             builder
                 .HasKey(a => a.Id);
@@ -32,7 +32,7 @@
             builder
                 .HasOne(a => a.OfficeRoom)
                 .WithOne()
-                .HasForeignKey(nameof(OfficeRoom), "AppointmentId")
+                .HasForeignKey(nameof(DbOfficeRoom), "AppointmentId")
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
