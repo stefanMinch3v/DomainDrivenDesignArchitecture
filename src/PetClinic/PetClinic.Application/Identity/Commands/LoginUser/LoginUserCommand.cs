@@ -5,6 +5,8 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using static Application.Common.ApplicationConstants;
+
     public class LoginUserCommand : UserInputModel, IRequest<Result<LoginOutputModel>>
     {
         public LoginUserCommand(string email, string password) 
@@ -22,7 +24,14 @@
             public async Task<Result<LoginOutputModel>> Handle(
                 LoginUserCommand request,
                 CancellationToken cancellationToken)
-                => await this.identity.Login(request);
+            {
+                if (request is null)
+                {
+                    return InvalidMessages.NullCommand;
+                }
+
+                return await this.identity.Login(request);
+            }
         }
     }
 }

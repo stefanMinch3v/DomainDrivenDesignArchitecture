@@ -63,6 +63,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
+                // should be in transaction
                 await this.doctorRepository.Save(doctor, cancellationToken);
                 await this.identity.AddToRoleDoctor(this.currentUser.UserId);
 

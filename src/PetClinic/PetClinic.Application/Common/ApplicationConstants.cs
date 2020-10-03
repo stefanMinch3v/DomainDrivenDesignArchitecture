@@ -10,6 +10,7 @@
 
         public static class InvalidMessages
         {
+            public const string NullCommand = "Invalid request";
             public const string Client = "Invalid member client.";
             public const string Doctor = "Invalid member doc.";
             public const string Pet = "Invalid pet.";
@@ -19,6 +20,9 @@
 
         public static class Validations
         {
+            public const int BreedMinimumLength = 2;
+            public const int PetNameMinimumLength = 2;
+            public const int FoundAtMinimumLength = 5;
             public const int ZeroNumber = 0;
         }
     }

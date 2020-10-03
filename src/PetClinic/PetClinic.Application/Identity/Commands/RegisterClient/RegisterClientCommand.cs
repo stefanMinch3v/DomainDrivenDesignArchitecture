@@ -57,6 +57,7 @@
                     .WithAddress(request.Address)
                     .Build();
 
+                // should be in transaction
                 await this.clientRepository.Save(client, cancellationToken);
                 await this.identity.AddToRoleClient(this.currentUser.UserId);
 

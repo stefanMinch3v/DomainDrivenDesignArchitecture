@@ -6,8 +6,11 @@
     using Domain.Common;
     using Domain.Common.SharedKernel;
     using MediatR;
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using static Application.Common.ApplicationConstants;
 
     public class AddPetCommand : IRequest<Result>
     {
@@ -38,11 +41,16 @@
 
             public async Task<Result> Handle(AddPetCommand request, CancellationToken cancellationToken)
             {
-                var isDoctor = this.currentUser.Role == ApplicationConstants.Roles.Doctor;
+                if (request is null)
+                {
+                    throw new ArgumentNullException(InvalidMessages.NullCommand);
+                }
+
+                var isDoctor = this.currentUser.Role == Roles.Doctor;
 
                 if (!isDoctor)
                 {
-                    return ApplicationConstants.InvalidMessages.Doctor;
+                    return InvalidMessages.Doctor;
                 }
 
                 var pet = this.petFactory

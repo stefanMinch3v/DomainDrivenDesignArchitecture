@@ -7,6 +7,8 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using static Common.ApplicationConstants;
+
     public class AddDiagnoseCommand : IRequest<Result>
     {
         public string UserIdClient { get; set; } = default!;
@@ -26,19 +28,19 @@
             {
                 if (request is null)
                 {
-                    throw new ArgumentNullException("Invalid command.");
+                    throw new ArgumentNullException(InvalidMessages.NullCommand);
                 }
 
                 var client = await this.clientRepository.Single(request.UserIdClient);
                 if (client is null)
                 {
-                    throw new ArgumentNullException(ApplicationConstants.InvalidMessages.Client);
+                    throw new InvalidOperationException(InvalidMessages.Client);
                 }
 
                 var currentPet = client.Pets.FirstOrDefault(p => p.Id == request.PetId);
                 if (currentPet is null)
                 {
-                    throw new ArgumentNullException(ApplicationConstants.InvalidMessages.Pet);
+                    throw new InvalidOperationException(InvalidMessages.Pet);
                 }
 
                 currentPet.AddDiagnose(request.IsSick, request.Date, request.Diagnose);

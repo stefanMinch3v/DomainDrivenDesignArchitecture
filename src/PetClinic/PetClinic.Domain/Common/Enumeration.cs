@@ -46,6 +46,19 @@
         public static T FromName<T>(string name) where T : Enumeration
             => Parse<T, string>(name, "name", item => item.Name == name);
 
+        public static bool HasValue<T>(int value) where T : Enumeration
+        {
+            try
+            {
+                FromValue<T>(value);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static T Parse<T, TValue>(TValue value, string description, Func<T, bool> predicate)
             where T : Enumeration
         {
