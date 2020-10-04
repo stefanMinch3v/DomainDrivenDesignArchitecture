@@ -3,6 +3,7 @@
     using Application.Appointments.Commands.MakeAsClient;
     using Application.Appointments.Commands.MakeAsDoctor;
     using Application.Appointments.Commands.Remove;
+    using Application.Appointments.Commands.Update;
     using Application.Appointments.Queries.GetAll;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
@@ -23,6 +24,11 @@
         [HttpPost]
         [Route(nameof(MakeAsDoctor))]
         public async Task<ActionResult> MakeAsDoctor([FromBody] MakeAsDoctorAppointmentCommand command)
+            => await base.Send(command);
+
+        [HttpPost]
+        [Route(nameof(Update))]
+        public async Task<ActionResult> Update([FromBody] UpdateAppointmentCommand command)
             => await base.Send(command);
 
         [HttpDelete]

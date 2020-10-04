@@ -91,7 +91,7 @@
             return this;
         }
 
-        public IClientFactory WithOptionalIdKey(int id)
+        public IClientFactory WithOptionalKeyId(int id)
         {
             this.id = id;
             this.isIdSet = true;

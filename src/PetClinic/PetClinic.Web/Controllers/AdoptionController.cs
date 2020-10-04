@@ -1,10 +1,10 @@
 ﻿namespace PetClinic.Web.Controllers
 {
+    using Application.Adoptions.Commands.AddPet;
     using Application.Adoptions.Commands.AdoptPet;
     using Application.Adoptions.Queries.GetAllPets;
     using Application.Adoptions.Queries.PetDetails;
     using Microsoft.AspNetCore.Mvc;
-    using PetClinic.Application.Adoptions.Commands.AddPet;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -21,8 +21,8 @@
             => await base.Send(new AdoptPetCommand(id));
 
         [HttpPost]
-        [Route(nameof(Add))]
-        public async Task<ActionResult> Add(AddPetCommand command)
+        [Route(nameof(AddPet))]
+        public async Task<ActionResult> AddPet([FromBody] AddPetCommand command)
             => await base.Send(command);
 
         [HttpGet]

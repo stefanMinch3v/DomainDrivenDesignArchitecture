@@ -186,7 +186,7 @@
                     dbClient.CreatedOn, 
                     dbClient.ModifiedBy, 
                     dbClient.ModifiedOn)
-                .WithOptionalIdKey(dbClient.Id)
+                .WithOptionalKeyId(dbClient.Id)
                 .Build();
         }
 

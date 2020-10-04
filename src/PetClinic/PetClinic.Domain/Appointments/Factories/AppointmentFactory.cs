@@ -10,10 +10,16 @@
 
     internal class AppointmentFactory : IAppointmentFactory
     {
+        private int id;
         private AppointmentDate appointmentDate = default!;
         private Client client = default!;
         private Doctor doctor = default!;
         private OfficeRoom officeRoom = default!;
+
+        private DateTime createdOn;
+        private string? createdBy;
+        private DateTime? modifiedOn;
+        private string? modifiedBy;
 
         public Appointment Build()
         {
@@ -25,7 +31,26 @@
                 throw new InvalidAppointmentException("Invalid appointment input.");
             }
 
-            return new Appointment(this.doctor, this.client, this.appointmentDate, this.officeRoom);
+            var appointment = new Appointment(this.doctor, this.client, this.appointmentDate, this.officeRoom);
+
+            if (this.id != default)
+            {
+                appointment.Id = this.id;
+            }
+
+            if (this.createdBy != null)
+            {
+                appointment.CreatedBy = this.createdBy;
+                appointment.CreatedOn = this.createdOn;
+            }
+
+            if (this.modifiedBy != null)
+            {
+                appointment.ModifiedBy = this.modifiedBy;
+                appointment.ModifiedOn = this.modifiedOn;
+            }
+
+            return appointment;
         }
 
         public IAppointmentFactory WithAppointmentDate(DateTime startDate, DateTime endDate)
@@ -58,7 +83,37 @@
             return this;
         }
 
+        public IAppointmentFactory WithOfficeRoom(Action<OfficeRoomFactory> officeRoom)
+        {
+            var officeRoomFactory = new OfficeRoomFactory();
+            officeRoom(officeRoomFactory);
+            this.officeRoom = officeRoomFactory.Build();
+
+            return this;
+        }
+
+        public IAppointmentFactory WithOptionalAuditableData(
+            string createdBy, 
+            DateTime createdOn, 
+            string? modifiedBy, 
+            DateTime? modifiedOn)
+        {
+            this.createdBy = createdBy;
+            this.createdOn = createdOn;
+            this.modifiedBy = modifiedBy;
+            this.modifiedOn = modifiedOn;
+
+            return this;
+        }
+
+        public IAppointmentFactory WithOptionalKeyId(int id)
+        {
+            this.id = id;
+            return this;
+        }
+
         // for inner factories expression parsing
+        // not used
         private void ParseExpression(Expression expression, string key, IDictionary<string, string> dict)
         {
             // expression starts here in type lambda

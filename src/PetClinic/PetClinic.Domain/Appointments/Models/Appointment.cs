@@ -3,6 +3,7 @@
     using Common;
     using Common.Exceptions;
     using Common.SharedKernel;
+    using System;
 
     public class Appointment : AuditableEntity<int>, IAggregateRoot
     {
@@ -40,7 +41,7 @@
 
         public Client Client { get; }
 
-        public AppointmentDate AppointmentDate { get; }
+        public AppointmentDate AppointmentDate { get; private set; }
 
         public OfficeRoom OfficeRoom { get; }
 
@@ -69,6 +70,12 @@
             }
 
             return false;
+        }
+
+        public void UpdateDate(DateTime startDate, DateTime endDate)
+        {
+            this.AppointmentDate = new AppointmentDate(startDate, endDate);
+            // raise event
         }
     }
 }

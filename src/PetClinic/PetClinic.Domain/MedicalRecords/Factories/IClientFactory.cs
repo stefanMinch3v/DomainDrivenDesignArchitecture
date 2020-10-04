@@ -24,7 +24,7 @@
 
         IClientFactory WithPet(Action<IPetFactory> pet);
 
-        IClientFactory WithOptionalIdKey(int id);
+        IClientFactory WithOptionalKeyId(int id);
 
         IClientFactory WithOptionalAuditableData(
             string createdBy,

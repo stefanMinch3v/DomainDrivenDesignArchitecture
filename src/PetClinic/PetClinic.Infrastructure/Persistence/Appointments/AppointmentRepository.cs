@@ -8,8 +8,8 @@
     using Domain.Appointments.Models;
     using Domain.Common;
     using Domain.Common.SharedKernel;
-    using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
+    using Models;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -21,7 +21,7 @@
         private readonly IAppointmentFactory appointmentFactory;
 
         public AppointmentRepository(
-            PetClinicDbContext context, 
+            PetClinicDbContext context,
             IMapper mapper,
             IAppointmentFactory appointmentFactory)
             : base(context)
@@ -30,13 +30,13 @@
             this.appointmentFactory = appointmentFactory;
         }
 
-        public Task<IReadOnlyList<Domain.Appointments.Models.Appointment>> GetAll(
+        public Task<IReadOnlyList<Appointment>> GetAll(
             string userId,
             CancellationToken cancellationToken = default)
             => this.GetAllDomain(userId, cancellationToken);
 
         public async Task<IReadOnlyList<AppointmentListingsOutputModel>> GetAllList(
-            string userId, 
+            string userId,
             CancellationToken cancellationToken = default)
         {
             var allDomain = await this.GetAllDomain(userId, cancellationToken);
@@ -51,9 +51,9 @@
                 .Include(a => a.OfficeRoom)
                 .Include(a => a.Doctor)
                 .Include(a => a.Client)
-                .FirstOrDefaultAsync(a => 
+                .FirstOrDefaultAsync(a =>
                     a.Id == appointmentId &&
-                    (a.ClientUserId == userId || a.DoctorUserId == userId), 
+                    (a.ClientUserId == userId || a.DoctorUserId == userId),
                 cancellationToken);
 
             if (currentUserAppointment is null)
@@ -80,6 +80,57 @@
             await this.Data.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task<Appointment> Single(
+            int appointmentId, 
+            string userId, 
+            CancellationToken cancellationToken)
+        {
+            var appointment = await base
+                .All()
+                .Include(a => a.Doctor)
+                .Include(a => a.Client)
+                .Include(a => a.OfficeRoom)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a =>
+                    a.Id == appointmentId &&
+                    (a.Doctor.UserId == userId || a.Client.UserId == userId),
+                    cancellationToken);
+
+            if (appointment is null)
+            {
+                return null!;
+            }
+
+            return this.appointmentFactory
+                .WithDoctor(doctor => doctor
+                    .WithDoctorType(
+                        Enumeration.FromValue<DoctorType>((int)appointment.Doctor.DoctorType))
+                    .WithName(appointment.Doctor.Name)
+                    .WithUserId(appointment.DoctorUserId))
+                .WithClient(client => client
+                    .WithName(appointment.Client.Name)
+                    .WithUserId(appointment.ClientUserId))
+                .WithOfficeRoom(officeRoom => officeRoom
+                    .WithKeyId(appointment.OfficeRoom.Id)
+                    .WithAvailability(appointment.OfficeRoom.IsAvailable)
+                    .WithRoomNumber(appointment.OfficeRoom.Number)
+                    .WithOfficeRoomType(
+                        Enumeration.FromValue<OfficeRoomType>((int)appointment.OfficeRoom.OfficeRoomType))
+                    .WithAuditableData(
+                        appointment.OfficeRoom.CreatedBy,
+                        appointment.OfficeRoom.CreatedOn,
+                        appointment.OfficeRoom.ModifiedBy,
+                        appointment.OfficeRoom.ModifiedOn))
+                .WithAppointmentDate(appointment.StartDate, appointment.EndDate)
+                .WithOptionalKeyId(appointment.Id)
+                .WithOptionalAuditableData(
+                    appointment.CreatedBy,
+                    appointment.CreatedOn,
+                    appointment.ModifiedBy,
+                    appointment.ModifiedOn)
+                .Build();
+        }
+
         // cannot make the factory before ToListAsync as it is in the adoption repository cuz here the linq query is too
         // complex and ef core throws an exception
         private async Task<IReadOnlyList<Appointment>> GetAllDomain(
@@ -93,6 +144,7 @@
                 .Include(a => a.Doctor)
                 .Include(a => a.Client)
                 .Include(a => a.OfficeRoom)
+                .AsNoTracking()
                 .ToListAsync(cancellationToken))
                 .Select(a => this.appointmentFactory
                     .WithDoctor(doctor => doctor

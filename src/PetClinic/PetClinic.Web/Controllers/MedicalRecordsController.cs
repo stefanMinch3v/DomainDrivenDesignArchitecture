@@ -34,7 +34,7 @@
 
         [HttpPost]
         [Route(nameof(AddDiagnose))]
-        public async Task<ActionResult> AddDiagnose(AddDiagnoseCommand command)
+        public async Task<ActionResult> AddDiagnose([FromBody] AddDiagnoseCommand command)
             => await base.Send(command);
 
         [HttpPost]

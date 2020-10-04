@@ -14,5 +14,15 @@
         IAppointmentFactory WithDoctor(Action<DoctorFactory> doctor);
 
         IAppointmentFactory WithClient(Action<ClientFactory> client);
+
+        IAppointmentFactory WithOfficeRoom(Action<OfficeRoomFactory> officeRoom);
+
+        IAppointmentFactory WithOptionalKeyId(int id);
+
+        IAppointmentFactory WithOptionalAuditableData(
+            string createdBy,
+            DateTime createdOn,
+            string? modifiedBy,
+            DateTime? modifiedOn);
     }
 }

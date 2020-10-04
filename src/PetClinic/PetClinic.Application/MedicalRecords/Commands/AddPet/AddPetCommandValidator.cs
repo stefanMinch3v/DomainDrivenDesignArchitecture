@@ -4,18 +4,19 @@
     using Domain.Common.SharedKernel;
     using FluentValidation;
 
-    using static Common.ApplicationConstants;
+    using static Common.ApplicationConstants.Validations;
+    using static Domain.Common.ModelConstants;
 
     public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
     {
         public AddPetCommandValidator()
         {
             this.RuleFor(c => c.Age)
-                .GreaterThanOrEqualTo(Validations.ZeroNumber);
+                .GreaterThanOrEqualTo(ZeroNumber);
 
             this.RuleFor(c => c.Breed)
                 .NotEmpty()
-                .MinimumLength(Validations.BreedMinimumLength);
+                .MinimumLength(BreedMinLength);
 
             this.RuleFor(c => c.Color)
                 .Must(Enumeration.HasValue<Color>)
@@ -27,7 +28,7 @@
 
             this.RuleFor(c => c.Name)
                 .NotEmpty()
-                .MinimumLength(Validations.PetNameMinimumLength);
+                .MinimumLength(NameMinLength);
 
             this.RuleFor(c => c.PetType)
                 .Must(Enumeration.HasValue<PetType>)

@@ -15,14 +15,13 @@
             public const string Doctor = "Invalid member doc.";
             public const string Pet = "Invalid pet.";
             public const string UnavailableAppointment = "The selected date/room/doctor/client is unavailable.";
+            public const string UnavailableAppointmentDate = "The selected date is unavailable.";
             public const string ExistingMember = "There is already an existing member with this account!";
+            public const string InvalidAppointment = "Invalid selected appointment.";
         }
 
         public static class Validations
         {
-            public const int BreedMinimumLength = 2;
-            public const int PetNameMinimumLength = 2;
-            public const int FoundAtMinimumLength = 5;
             public const int ZeroNumber = 0;
         }
     }

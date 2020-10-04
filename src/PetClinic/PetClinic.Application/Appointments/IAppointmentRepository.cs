@@ -16,5 +16,7 @@
             CancellationToken cancellationToken = default);
 
         Task<bool> Remove(int appointmentId, string userId, CancellationToken cancellationToken = default);
+
+        Task<Appointment> Single(int appointmentId, string userId, CancellationToken cancellationToken);
     }
 }

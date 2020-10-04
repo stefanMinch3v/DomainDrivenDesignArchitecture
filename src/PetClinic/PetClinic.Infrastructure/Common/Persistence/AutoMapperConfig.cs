@@ -23,10 +23,6 @@
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.AppointmentDate.EndDate))
                 .ForMember(dest => dest.DoctorUserId, opt => opt.MapFrom(src => src.Doctor.UserId))
                 .ForMember(dest => dest.ClientUserId, opt => opt.MapFrom(src => src.Client.UserId))
-                .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
-                .ForMember(dest => dest.ModifiedOn, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 // doctor
                 .ForPath(dest => dest.Doctor.DoctorType, opt => opt.MapFrom(src => src.Doctor.DoctorType.Value))
                 .ForPath(dest => dest.Doctor.Name, opt => opt.MapFrom(src => src.Doctor.Name))
@@ -52,11 +48,12 @@
                 // office room
                 .ForPath(dest => dest.OfficeRoom.OfficeRoomType, opt => opt.MapFrom(src => src.OfficeRoom.OfficeRoomType.Value))
                 .ForPath(dest => dest.OfficeRoom.Number, opt => opt.MapFrom(src => src.OfficeRoom.Number))
-                .ForPath(dest => dest.OfficeRoom.ModifiedBy, opt => opt.Ignore())
+                .ForPath(dest => dest.OfficeRoom.ModifiedBy, opt => opt.MapFrom(src => src.OfficeRoom.ModifiedBy))
                 .ForPath(dest => dest.OfficeRoom.AppointmentId, opt => opt.Ignore())
-                .ForPath(dest => dest.OfficeRoom.CreatedOn, opt => opt.Ignore())
-                .ForPath(dest => dest.OfficeRoom.CreatedBy, opt => opt.Ignore())
-                .ForPath(dest => dest.OfficeRoom.ModifiedOn, opt => opt.Ignore());
+                .ForPath(dest => dest.OfficeRoom.CreatedOn, opt => opt.MapFrom(src => src.OfficeRoom.CreatedOn))
+                .ForPath(dest => dest.OfficeRoom.CreatedBy, opt => opt.MapFrom(src => src.OfficeRoom.CreatedBy))
+                .ForPath(dest => dest.OfficeRoom.ModifiedOn, opt => opt.MapFrom(src => src.OfficeRoom.ModifiedOn))
+                .ForPath(dest => dest.OfficeRoom.Id, opt => opt.MapFrom(src => src.OfficeRoom.Id));
 
             // medical records context
             this.CreateMap<Domain.MedicalRecords.Models.Client, Infrastructure.Persistence.Models.DbClient>()
