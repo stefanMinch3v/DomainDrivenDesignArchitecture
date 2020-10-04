@@ -45,3 +45,4 @@ Medical records bounded context consists of:
 - FakeItEasy
 - Fluent Assertions
 - JwtBearer
+- Scrutor
