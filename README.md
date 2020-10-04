@@ -39,7 +39,7 @@ Medical records bounded context consists of:
 ### Technologies and tools used:
 - ASP.NET Core + EF Core 3.1
 - FluentValidation
-- MediatR
+- MediatR + CQRS
 - AutoMapper
 - Bogus
 - FakeItEasy
