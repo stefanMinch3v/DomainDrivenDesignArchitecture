@@ -7,7 +7,7 @@
     using Web.Controllers;
     using Xunit;
 
-    public class AppointmentControllerSpecs
+    public class AppointmentsControllerSpecs
     {
         //[Theory]
         //[InlineData(

@@ -89,7 +89,14 @@
         {
             var dbEntity = this.mapper.Map<DbDoctor>(entity);
 
-            this.Data.Update(dbEntity);
+            var isTracking = this.Data.ChangeTracker
+                 .Entries<DbDoctor>()
+                 .Any(x => x.Entity.Id == dbEntity.Id);
+
+            if (!isTracking)
+            {
+                this.Data.Update(dbEntity);
+            }
 
             await this.Data.SaveChangesAsync(cancellationToken);
         }

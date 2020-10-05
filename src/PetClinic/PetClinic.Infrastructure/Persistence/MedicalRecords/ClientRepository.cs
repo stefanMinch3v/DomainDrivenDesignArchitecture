@@ -110,11 +110,18 @@
 
         public async Task Save(Client entity, CancellationToken cancellationToken = default)
         {
-            var dbClient = this.mapper.Map<DbClient>(entity);
+            var dbEntity = this.mapper.Map<DbClient>(entity);
 
-            this.MapTo(dbClient, entity);
+            this.MapTo(dbEntity, entity);
 
-            this.Data.Update(dbClient);
+            var isTracking = this.Data.ChangeTracker
+                .Entries<DbClient>()
+                .Any(x => x.Entity.Id == dbEntity.Id);
+
+            if (!isTracking)
+            {
+                this.Data.Update(dbEntity);
+            }
 
             await this.Data.SaveChangesAsync(cancellationToken);
         }
