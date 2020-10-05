@@ -26,7 +26,7 @@
         public async Task<ActionResult> MakeAsDoctor([FromBody] MakeAsDoctorAppointmentCommand command)
             => await base.Send(command);
 
-        [HttpPost]
+        [HttpPut]
         [Route(nameof(Update))]
         public async Task<ActionResult> Update([FromBody] UpdateAppointmentCommand command)
             => await base.Send(command);

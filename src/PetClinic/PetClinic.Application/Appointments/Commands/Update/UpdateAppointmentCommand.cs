@@ -49,7 +49,8 @@
 
                 currentAppointment.UpdateDate(request.StartDate, request.EndDate);
 
-                var allAppointments = await this.appointmentRepository.GetAll(this.currentUser.UserId, cancellationToken);
+                var allAppointments = await this.appointmentRepository
+                    .GetAll(this.currentUser.UserId, currentAppointment.Id, cancellationToken);
 
                 foreach (var appointment in allAppointments)
                 {

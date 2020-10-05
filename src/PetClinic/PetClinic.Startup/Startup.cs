@@ -42,6 +42,7 @@ namespace PetClinic.Startup
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapControllers())
+                .AddSwaggerUI()
                 .Initialize()
                 .AddDefaultRoles();
         }

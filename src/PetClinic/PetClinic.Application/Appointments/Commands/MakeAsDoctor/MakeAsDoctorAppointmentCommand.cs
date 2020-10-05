@@ -110,7 +110,7 @@
                 Appointment currentAppointment,
                 CancellationToken cancellationToken)
             {
-                var memberAppointments = await this.appointmentRepository.GetAll(userId, cancellationToken);
+                var memberAppointments = await this.appointmentRepository.GetAll(userId, cancellationToken: cancellationToken);
 
                 foreach (var appointment in memberAppointments)
                 {

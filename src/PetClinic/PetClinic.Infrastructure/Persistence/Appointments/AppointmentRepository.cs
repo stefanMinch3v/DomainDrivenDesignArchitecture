@@ -32,14 +32,15 @@
 
         public Task<IReadOnlyList<Appointment>> GetAll(
             string userId,
+            int? id = null,
             CancellationToken cancellationToken = default)
-            => this.GetAllDomain(userId, cancellationToken);
+            => this.GetAllDomain(userId, id, cancellationToken);
 
         public async Task<IReadOnlyList<AppointmentListingsOutputModel>> GetAllList(
             string userId,
             CancellationToken cancellationToken = default)
         {
-            var allDomain = await this.GetAllDomain(userId, cancellationToken);
+            var allDomain = await this.GetAllDomain(userId, cancellationToken: cancellationToken);
 
             return this.mapper.Map<IReadOnlyList<AppointmentListingsOutputModel>>(allDomain);
         }
@@ -135,12 +136,14 @@
         // complex and ef core throws an exception
         private async Task<IReadOnlyList<Appointment>> GetAllDomain(
             string userId,
+            int? id = null,
             CancellationToken cancellationToken = default)
             => (await base
                 .All()
                 .Where(a =>
                     a.Doctor.UserId == userId ||
-                    a.Client.UserId == userId)
+                    a.Client.UserId == userId &&
+                    a.Id != id)
                 .Include(a => a.Doctor)
                 .Include(a => a.Client)
                 .Include(a => a.OfficeRoom)
@@ -155,10 +158,13 @@
                     .WithClient(client => client
                         .WithName(a.Client.Name)
                         .WithUserId(a.ClientUserId))
-                    .WithOfficeRoom(
-                        a.OfficeRoom.Number,
-                        Enumeration.FromValue<OfficeRoomType>((int)a.OfficeRoom.OfficeRoomType))
+                    .WithOfficeRoom(room => room
+                        .WithKeyId(a.OfficeRoom.Id)
+                        .WithRoomNumber(a.OfficeRoom.Number)
+                        .WithAvailability(a.OfficeRoom.IsAvailable)
+                        .WithOfficeRoomType(Enumeration.FromValue<OfficeRoomType>((int)a.OfficeRoom.OfficeRoomType)))
                     .WithAppointmentDate(a.StartDate, a.EndDate)
+                    .WithOptionalKeyId(a.Id)
                     .Build())
                 .ToList();
     }

@@ -9,7 +9,7 @@
 
     public interface IAppointmentRepository : IRepository<Appointment>
     {
-        Task<IReadOnlyList<Appointment>> GetAll(string userId, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<Appointment>> GetAll(string userId, int? id = null, CancellationToken cancellationToken = default);
 
         Task<IReadOnlyList<AppointmentListingsOutputModel>> GetAllList(
             string userId, 

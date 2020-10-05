@@ -7,6 +7,7 @@
 
     public class AppointmentListingsOutputModel : IMapFrom<Appointment>, IHaveCustomMapping
     {
+        public int Id { get; set; }
         public string DoctorUserId { get; set; } = default!;
         public string ClientUserId { get; set; } = default!;
 

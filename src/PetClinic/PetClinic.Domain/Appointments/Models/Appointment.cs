@@ -68,6 +68,10 @@
             {
                 return true;
             }
+            else if (!dateIsNotFree && (busyDoctor || busyClient))
+            {
+                return true;
+            }
 
             return false;
         }
