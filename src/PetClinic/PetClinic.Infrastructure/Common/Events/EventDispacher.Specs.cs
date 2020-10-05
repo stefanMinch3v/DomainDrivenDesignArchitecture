@@ -13,27 +13,27 @@
         public async Task DispatchShouldDispatchEvents()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddTransient<IEventHandler<ArticleEvent>, ArticleEventHandler>();
+            serviceCollection.AddTransient<IEventHandler<TestEvent>, TestEventHandler>();
 
             var dispatcher = new EventDispatcher(serviceCollection.BuildServiceProvider());
 
-            var domainEvent = new ArticleEvent();
+            var domainEvent = new TestEvent();
 
             await dispatcher.Dispatch(domainEvent);
 
             Assert.True(domainEvent.Handled);
         }
 
-        private class ArticleEvent : IDomainEvent
+        private class TestEvent : IDomainEvent
         {
             public bool Handled { get; set; }
 
             public DateTime OccurredOn => DateTime.Now;
         }
 
-        private class ArticleEventHandler : IEventHandler<ArticleEvent>
+        private class TestEventHandler : IEventHandler<TestEvent>
         {
-            public Task Handle(ArticleEvent domainEvent)
+            public Task Handle(TestEvent domainEvent)
             {
                 domainEvent.Handled = true;
                 return Task.CompletedTask;
