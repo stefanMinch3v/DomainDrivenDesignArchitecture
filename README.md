@@ -47,3 +47,5 @@ Medical records bounded context consists of:
 - JwtBearer
 - Scrutor
 - Swagger
+- Moq
+- Shouldly
