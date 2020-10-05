@@ -46,3 +46,4 @@ Medical records bounded context consists of:
 - Fluent Assertions
 - JwtBearer
 - Scrutor
+- Swagger
