@@ -1,5 +1,6 @@
 ﻿namespace PetClinic.Domain.Common
 {
+    using Models;
     using FluentAssertions;
     using Xunit;
 

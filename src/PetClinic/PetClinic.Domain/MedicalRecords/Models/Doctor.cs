@@ -2,6 +2,7 @@
 {
     using Common;
     using Common.Exceptions;
+    using Common.Models;
     using Common.SharedKernel;
     using System.Collections.Generic;
     using System.Linq;

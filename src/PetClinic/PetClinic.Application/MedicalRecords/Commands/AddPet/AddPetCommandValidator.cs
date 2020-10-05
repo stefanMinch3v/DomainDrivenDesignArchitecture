@@ -1,11 +1,11 @@
 ﻿namespace PetClinic.Application.MedicalRecords.Commands.AddPet
 {
-    using Domain.Common;
+    using Domain.Common.Models;
     using Domain.Common.SharedKernel;
     using FluentValidation;
 
     using static Common.ApplicationConstants.Validations;
-    using static Domain.Common.ModelConstants;
+    using static Domain.Common.Models.ModelConstants;
 
     public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
     {

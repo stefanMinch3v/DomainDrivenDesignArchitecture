@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain.Appointments.Models
 {
-    using Common;
+    using Common.Models;
 
     public class OfficeRoomType : Enumeration
     {

@@ -3,7 +3,7 @@
     using Application.MedicalRecords;
     using Common;
     using Common.Contracts;
-    using Domain.Common;
+    using Domain.Common.Models;
     using Domain.Common.SharedKernel;
     using Domain.MedicalRecords.Factories;
     using MediatR;

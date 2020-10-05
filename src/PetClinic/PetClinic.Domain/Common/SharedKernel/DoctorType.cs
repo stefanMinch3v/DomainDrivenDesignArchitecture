@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain.Common.SharedKernel
 {
-    using Common;
+    using Common.Models;
 
     /// <summary>
     /// https://www.sgu.edu/blog/veterinary/types-of-veterinarians-and-what-they-do/

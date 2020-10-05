@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain.Common.SharedKernel
 {
-    using Common;
+    using Common.Models;
     using Exceptions;
 
     public class PhoneNumber : ValueObject

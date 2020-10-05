@@ -1,6 +1,6 @@
 ﻿namespace PetClinic.Domain.Common
 {
-    using Exceptions;
+    using Models;
     using System;
 
     public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity

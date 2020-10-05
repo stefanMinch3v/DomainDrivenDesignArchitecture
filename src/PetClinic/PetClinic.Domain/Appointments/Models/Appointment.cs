@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Domain.Appointments.Models
 {
     using Common;
+    using Common.Models;
     using Common.Exceptions;
     using Common.SharedKernel;
     using System;

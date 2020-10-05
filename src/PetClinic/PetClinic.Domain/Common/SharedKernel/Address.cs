@@ -1,7 +1,7 @@
 ﻿namespace PetClinic.Domain.Common.SharedKernel
 {
     using Exceptions;
-    using Common;
+    using Common.Models;
 
     public class Address : ValueObject
     {

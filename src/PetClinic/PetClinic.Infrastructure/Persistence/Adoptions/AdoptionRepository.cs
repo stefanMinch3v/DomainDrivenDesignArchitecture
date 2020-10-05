@@ -7,10 +7,10 @@
     using Common.Persistence;
     using Domain.Adoptions.Factories;
     using Domain.Adoptions.Models;
+    using Domain.Common.Models;
     using Domain.Common.SharedKernel;
     using Infrastructure.Persistence.Models;
     using Microsoft.EntityFrameworkCore;
-    using PetClinic.Domain.Common;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;

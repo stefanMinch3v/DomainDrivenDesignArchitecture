@@ -1,9 +1,11 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence
 {
+    using Application.Common.Contracts;
     using Domain.Common;
-    using PetClinic.Infrastructure.Common.Events;
-    using PetClinic.Infrastructure.Persistence.Identity;
-    using PetClinic.Infrastructure.Persistence.Models;
+    using Domain.Common.Models;
+    using Infrastructure.Common.Events;
+    using Infrastructure.Persistence.Identity;
+    using Infrastructure.Persistence.Models;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -11,7 +13,6 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Contracts;
 
     public class PetClinicDbContext : IdentityDbContext<User>
     {

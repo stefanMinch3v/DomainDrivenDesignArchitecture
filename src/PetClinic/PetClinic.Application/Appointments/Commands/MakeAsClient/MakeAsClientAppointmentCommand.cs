@@ -4,7 +4,7 @@
     using Common.Contracts;
     using Domain.Appointments.Factories;
     using Domain.Appointments.Models;
-    using Domain.Common;
+    using Domain.Common.Models;
     using Domain.Common.SharedKernel;
     using MediatR;
     using System;

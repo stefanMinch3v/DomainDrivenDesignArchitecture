@@ -3,7 +3,7 @@
     using Application.Common;
     using Application.Common.Contracts;
     using Domain.Adoptions.Factories;
-    using Domain.Common;
+    using Domain.Common.Models;
     using Domain.Common.SharedKernel;
     using MediatR;
     using System;

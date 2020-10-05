@@ -1,7 +1,7 @@
 ﻿namespace PetClinic.Domain.MedicalRecords.Models
 {
-    using Common;
     using Common.Exceptions;
+    using Common.Models;
     using Common.SharedKernel;
 
     public class Appointment

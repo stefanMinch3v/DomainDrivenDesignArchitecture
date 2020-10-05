@@ -1,4 +1,4 @@
-﻿namespace PetClinic.Domain.Common
+﻿namespace PetClinic.Domain.Common.Models
 {
     using System.Collections.Generic;
 
