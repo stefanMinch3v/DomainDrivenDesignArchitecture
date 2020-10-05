@@ -50,7 +50,7 @@
             => MyController<AppointmentsController>
                 .Instance(controller => controller
                     .WithData(entities => entities
-                        .WithEntities<PetClinicDbContext>(TestData.TestObjects)))
+                        .WithEntities<PetClinicDbContext>(TestData.TestAppointments)))
 
                 .Calling(c => c.Update(new UpdateAppointmentCommand 
                 {
@@ -74,7 +74,7 @@
             => MyController<AppointmentsController>
                 .Instance(controller => controller
                     .WithData(entities => entities
-                        .WithEntities<PetClinicDbContext>(TestData.TestObjects)))
+                        .WithEntities<PetClinicDbContext>(TestData.TestAppointments)))
 
                 .Calling(c => c.Update(new UpdateAppointmentCommand
                 {
@@ -93,7 +93,7 @@
             => MyController<AppointmentsController>
                 .Instance(controller => controller
                     .WithData(entities => entities
-                        .WithEntities<PetClinicDbContext>(TestData.TestObjects)))
+                        .WithEntities<PetClinicDbContext>(TestData.TestAppointments)))
 
                 .Calling(c => c.Remove(appointmentId))
 
@@ -106,7 +106,7 @@
             => MyController<AppointmentsController>
                 .Instance(controller => controller
                     .WithData(entities => entities
-                        .WithEntities<PetClinicDbContext>(TestData.TestObjects)))
+                        .WithEntities<PetClinicDbContext>(TestData.TestAppointments)))
 
                 .Calling(c => c.Remove(appointmentId))
 

@@ -16,6 +16,10 @@
                     .SetupGet(u => u.UserId)
                     .Returns(TestUser.Identifier);
 
+                currentUserMock
+                    .SetupGet(u => u.Role)
+                    .Returns(TestData.ClientRole);
+
                 return currentUserMock.Object;
             }
         }
@@ -28,7 +32,7 @@
 
                 currentUserMock
                     .SetupGet(u => u.Now)
-                    .Returns(TestData.TestNow);
+                    .Returns(TestData.TestDateNow);
 
                 return currentUserMock.Object;
             }
