@@ -1,6 +1,7 @@
 ﻿namespace PetClinic.Infrastructure.Common.Persistence
 {
     using AutoMapper;
+    using Infrastructure.Persistence.Models;
 
     // Cannot add reference from Application to Infrastructure that's why im using this manual mappings instead of the
     // reflection with IMapFrom
@@ -9,7 +10,7 @@
         public AutoMapperConfig()
         {
             // adoption context
-            this.CreateMap<Domain.Adoptions.Models.Pet, Infrastructure.Persistence.Models.DbPet>()
+            this.CreateMap<Domain.Adoptions.Models.Pet, DbPet>()
                 .ForMember(dest => dest.PetType, opt => opt.MapFrom(src => src.PetType.Value))
                 .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color.Value))
                 .ForMember(dest => dest.EyeColor, opt => opt.MapFrom(src => src.EyeColor.Value))
@@ -18,7 +19,7 @@
                 .ForMember(dest => dest.ModifiedOn, opt => opt.Ignore());
 
             // appointment context
-            this.CreateMap<Domain.Appointments.Models.Appointment, Infrastructure.Persistence.Models.DbAppointment>()
+            this.CreateMap<Domain.Appointments.Models.Appointment, DbAppointment>()
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.AppointmentDate.StartDate))
                 .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.AppointmentDate.EndDate))
                 .ForMember(dest => dest.DoctorUserId, opt => opt.MapFrom(src => src.Doctor.UserId))
@@ -56,16 +57,16 @@
                 .ForPath(dest => dest.OfficeRoom.Id, opt => opt.MapFrom(src => src.OfficeRoom.Id));
 
             // medical records context
-            this.CreateMap<Domain.MedicalRecords.Models.Client, Infrastructure.Persistence.Models.DbClient>()
+            this.CreateMap<Domain.MedicalRecords.Models.Client, DbClient>()
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address.Value))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber.Value))
                 .ForMember(dest => dest.Pets, opt => opt.Ignore());
 
-            this.CreateMap<Domain.MedicalRecords.Models.Pet, Infrastructure.Persistence.Models.DbPet>()
+            this.CreateMap<Domain.MedicalRecords.Models.Pet, DbPet>()
                 .ForPath(dest => dest.FoundAt, opt => opt.MapFrom(src => src.FoundAt.Value))
                 .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
 
-            this.CreateMap<Domain.MedicalRecords.Models.Doctor, Infrastructure.Persistence.Models.DbDoctor>()
+            this.CreateMap<Domain.MedicalRecords.Models.Doctor, DbDoctor>()
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address.Value))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber.Value))
                 .ForMember(dest => dest.DoctorType, opt => opt.MapFrom(src => src.DoctorType.Value))
@@ -74,123 +75,123 @@
                 .ForMember(dest => dest.ModifiedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.ModifiedOn, opt => opt.Ignore());
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbPet, Domain.MedicalRecords.Models.Pet>()
+            this.CreateMap<DbPet, Domain.MedicalRecords.Models.Pet>()
                 .ForPath(dest => dest.FoundAt, opt => opt.MapFrom(src => src.FoundAt))
                 .ForMember(dest => dest.PetStatusData, opt => opt.Ignore());
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbColor, Domain.Common.SharedKernel.Color>()
+            this.CreateMap<DbColor, Domain.Common.SharedKernel.Color>()
                 .ConvertUsing(new ColorConverter());
 
-            this.CreateMap<Domain.Common.SharedKernel.Color, Infrastructure.Persistence.Models.DbColor>()
+            this.CreateMap<Domain.Common.SharedKernel.Color, DbColor>()
                 .ConvertUsing(new ColorConverterReverse());
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbPetType, Domain.Common.SharedKernel.PetType>()
+            this.CreateMap<DbPetType, Domain.Common.SharedKernel.PetType>()
                 .ConvertUsing(new PetTypeConverter());
 
-            this.CreateMap<Domain.Common.SharedKernel.PetType, Infrastructure.Persistence.Models.DbPetType>()
+            this.CreateMap<Domain.Common.SharedKernel.PetType, DbPetType>()
                 .ConvertUsing(new PetTypeConverterReverse());
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbClient, Application.MedicalRecords.Queries.AllClients.ClientListingsOutputModel>();
+            this.CreateMap<DbClient, Application.MedicalRecords.Queries.AllClients.ClientListingsOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbDoctor, Application.MedicalRecords.Queries.AllDoctors.DoctorListingsOutputModel>();
+            this.CreateMap<DbDoctor, Application.MedicalRecords.Queries.AllDoctors.DoctorListingsOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbClient, Application.MedicalRecords.Queries.ClientDetails.ClientDetailsOutputModel>()
+            this.CreateMap<DbClient, Application.MedicalRecords.Queries.ClientDetails.ClientDetailsOutputModel>()
                 .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
                 .ForMember(dest => dest.Pets, opt => opt.MapFrom(src => src.Pets));
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbAppointment, Application.MedicalRecords.Queries.ClientDetails.AppointmentForClientOutputModel>()
+            this.CreateMap<DbAppointment, Application.MedicalRecords.Queries.ClientDetails.AppointmentForClientOutputModel>()
                 .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => src.Doctor));
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbDoctor, Application.MedicalRecords.Queries.ClientDetails.DoctorFlatOutputModel>();
+            this.CreateMap<DbDoctor, Application.MedicalRecords.Queries.ClientDetails.DoctorFlatOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbPet, Application.MedicalRecords.Queries.Common.PetOutputModel>()
+            this.CreateMap<DbPet, Application.MedicalRecords.Queries.Common.PetOutputModel>()
                 .ForMember(dest => dest.PetStatusData, opt => opt.MapFrom(src => src.PetStatusData));
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbPetStatus, Application.MedicalRecords.Queries.Common.PetStatusDataOutputModel>();
+            this.CreateMap<DbPetStatus, Application.MedicalRecords.Queries.Common.PetStatusDataOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbDoctor, Application.MedicalRecords.Queries.DoctorDetails.DoctorDetailsOutputModel>();
+            this.CreateMap<DbDoctor, Application.MedicalRecords.Queries.DoctorDetails.DoctorDetailsOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbAppointment, Application.MedicalRecords.Queries.DoctorDetails.AppointmentForDoctorOutputModel>();
+            this.CreateMap<DbAppointment, Application.MedicalRecords.Queries.DoctorDetails.AppointmentForDoctorOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbClient, Application.MedicalRecords.Queries.DoctorDetails.ClientFlatOutputModel>();
+            this.CreateMap<DbClient, Application.MedicalRecords.Queries.DoctorDetails.ClientFlatOutputModel>();
 
-            this.CreateMap<Infrastructure.Persistence.Models.DbOfficeRoom, Application.MedicalRecords.Queries.DoctorDetails.OfficeRoomOutputModel>();
+            this.CreateMap<DbOfficeRoom, Application.MedicalRecords.Queries.DoctorDetails.OfficeRoomOutputModel>();
         }
 
-        internal class ColorConverter : ITypeConverter<Infrastructure.Persistence.Models.DbColor, Domain.Common.SharedKernel.Color>
+        internal class ColorConverter : ITypeConverter<DbColor, Domain.Common.SharedKernel.Color>
         {
             public Domain.Common.SharedKernel.Color Convert(
-                Infrastructure.Persistence.Models.DbColor source,
+                DbColor source,
                 Domain.Common.SharedKernel.Color destination,
                 ResolutionContext context) 
                 => source switch
                 {
-                    Infrastructure.Persistence.Models.DbColor.Red => Domain.Common.SharedKernel.Color.Red,
-                    Infrastructure.Persistence.Models.DbColor.Black => Domain.Common.SharedKernel.Color.Black,
-                    Infrastructure.Persistence.Models.DbColor.Gray => Domain.Common.SharedKernel.Color.Gray,
-                    Infrastructure.Persistence.Models.DbColor.Yellow => Domain.Common.SharedKernel.Color.Yellow,
-                    Infrastructure.Persistence.Models.DbColor.Orange => Domain.Common.SharedKernel.Color.Orange,
-                    Infrastructure.Persistence.Models.DbColor.White => Domain.Common.SharedKernel.Color.White,
+                    DbColor.Red => Domain.Common.SharedKernel.Color.Red,
+                    DbColor.Black => Domain.Common.SharedKernel.Color.Black,
+                    DbColor.Gray => Domain.Common.SharedKernel.Color.Gray,
+                    DbColor.Yellow => Domain.Common.SharedKernel.Color.Yellow,
+                    DbColor.Orange => Domain.Common.SharedKernel.Color.Orange,
+                    DbColor.White => Domain.Common.SharedKernel.Color.White,
                     _ => throw new System.InvalidOperationException(nameof(source)),
                 };
         }
 
-        internal class ColorConverterReverse : ITypeConverter<Domain.Common.SharedKernel.Color, Infrastructure.Persistence.Models.DbColor>
+        internal class ColorConverterReverse : ITypeConverter<Domain.Common.SharedKernel.Color, DbColor>
         {
-            public Infrastructure.Persistence.Models.DbColor Convert(
+            public DbColor Convert(
                 Domain.Common.SharedKernel.Color source,
-                Infrastructure.Persistence.Models.DbColor destination,
+                DbColor destination,
                 ResolutionContext context)
                 => source.Value switch
                 {
-                    1 => Infrastructure.Persistence.Models.DbColor.Red,
-                    2 => Infrastructure.Persistence.Models.DbColor.Black,
-                    3 => Infrastructure.Persistence.Models.DbColor.Gray,
-                    4 => Infrastructure.Persistence.Models.DbColor.Yellow,
-                    5 => Infrastructure.Persistence.Models.DbColor.Orange,
-                    6 => Infrastructure.Persistence.Models.DbColor.White,
+                    1 => DbColor.Red,
+                    2 => DbColor.Black,
+                    3 => DbColor.Gray,
+                    4 => DbColor.Yellow,
+                    5 => DbColor.Orange,
+                    6 => DbColor.White,
                     _ => throw new System.InvalidOperationException(nameof(source))
                 };
         }
 
-        internal class PetTypeConverter : ITypeConverter<Infrastructure.Persistence.Models.DbPetType, Domain.Common.SharedKernel.PetType>
+        internal class PetTypeConverter : ITypeConverter<DbPetType, Domain.Common.SharedKernel.PetType>
         {
             public Domain.Common.SharedKernel.PetType Convert(
-                Infrastructure.Persistence.Models.DbPetType source, 
+                DbPetType source, 
                 Domain.Common.SharedKernel.PetType destination, 
                 ResolutionContext context)
                 => source switch
                 {
-                    Infrastructure.Persistence.Models.DbPetType.Cat => Domain.Common.SharedKernel.PetType.Cat,
-                    Infrastructure.Persistence.Models.DbPetType.Dog => Domain.Common.SharedKernel.PetType.Dog,
-                    Infrastructure.Persistence.Models.DbPetType.Piggy => Domain.Common.SharedKernel.PetType.Piggy,
-                    Infrastructure.Persistence.Models.DbPetType.Bird => Domain.Common.SharedKernel.PetType.Bird,
-                    Infrastructure.Persistence.Models.DbPetType.Fish => Domain.Common.SharedKernel.PetType.Fish,
-                    Infrastructure.Persistence.Models.DbPetType.Mouse => Domain.Common.SharedKernel.PetType.Mouse,
-                    Infrastructure.Persistence.Models.DbPetType.Horse => Domain.Common.SharedKernel.PetType.Horse,
-                    Infrastructure.Persistence.Models.DbPetType.Sheep => Domain.Common.SharedKernel.PetType.Sheep,
-                    Infrastructure.Persistence.Models.DbPetType.Reptile => Domain.Common.SharedKernel.PetType.Reptile,
+                    DbPetType.Cat => Domain.Common.SharedKernel.PetType.Cat,
+                    DbPetType.Dog => Domain.Common.SharedKernel.PetType.Dog,
+                    DbPetType.Piggy => Domain.Common.SharedKernel.PetType.Piggy,
+                    DbPetType.Bird => Domain.Common.SharedKernel.PetType.Bird,
+                    DbPetType.Fish => Domain.Common.SharedKernel.PetType.Fish,
+                    DbPetType.Mouse => Domain.Common.SharedKernel.PetType.Mouse,
+                    DbPetType.Horse => Domain.Common.SharedKernel.PetType.Horse,
+                    DbPetType.Sheep => Domain.Common.SharedKernel.PetType.Sheep,
+                    DbPetType.Reptile => Domain.Common.SharedKernel.PetType.Reptile,
                     _ => throw new System.InvalidOperationException(nameof(source))
                 };
         }
 
-        internal class PetTypeConverterReverse : ITypeConverter<Domain.Common.SharedKernel.PetType, Infrastructure.Persistence.Models.DbPetType>
+        internal class PetTypeConverterReverse : ITypeConverter<Domain.Common.SharedKernel.PetType, DbPetType>
         {
-            public Infrastructure.Persistence.Models.DbPetType Convert(
+            public DbPetType Convert(
                 Domain.Common.SharedKernel.PetType source, 
-                Infrastructure.Persistence.Models.DbPetType destination, 
+                DbPetType destination, 
                 ResolutionContext context)
                 => source.Value switch
                 {
-                    1 => Infrastructure.Persistence.Models.DbPetType.Cat,
-                    2 => Infrastructure.Persistence.Models.DbPetType.Dog,
-                    3 => Infrastructure.Persistence.Models.DbPetType.Piggy,
-                    4 => Infrastructure.Persistence.Models.DbPetType.Bird,
-                    5 => Infrastructure.Persistence.Models.DbPetType.Fish,
-                    6 => Infrastructure.Persistence.Models.DbPetType.Mouse,
-                    7 => Infrastructure.Persistence.Models.DbPetType.Horse,
-                    8 => Infrastructure.Persistence.Models.DbPetType.Sheep,
-                    9 => Infrastructure.Persistence.Models.DbPetType.Reptile,
+                    1 => DbPetType.Cat,
+                    2 => DbPetType.Dog,
+                    3 => DbPetType.Piggy,
+                    4 => DbPetType.Bird,
+                    5 => DbPetType.Fish,
+                    6 => DbPetType.Mouse,
+                    7 => DbPetType.Horse,
+                    8 => DbPetType.Sheep,
+                    9 => DbPetType.Reptile,
                     _ => throw new System.InvalidOperationException(nameof(source))
                 };
         }
