@@ -46,6 +46,8 @@
                 this.doctorRepository = doctorRepository;
             }
 
+            // ideally I should raise an event user created and then consumer will catch it in the medical records context
+            // and create client or doctor but I dont have idenity models as domain models ... (we raise only from domain models)
             public async Task<Result> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
             {
                 var existingDoctor = await this.doctorRepository.AnyExisting(this.currentUser.UserId, cancellationToken);

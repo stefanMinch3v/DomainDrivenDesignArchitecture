@@ -37,6 +37,9 @@
                 this.appointmentFactory = appointmentFactory;
             }
 
+            // ideally I should raise an event appointment created and in the medical records context should consume it
+            // but since im using the same db models and database couldnt figure that out, if it was microservices separated
+            // from the beggining would have been easier to deal with
             public async Task<Result> Handle(MakeAsDoctorAppointmentCommand request, CancellationToken cancellationToken)
             {
                 var isDoctor = this.currentUser.Role == ApplicationConstants.Roles.Doctor;

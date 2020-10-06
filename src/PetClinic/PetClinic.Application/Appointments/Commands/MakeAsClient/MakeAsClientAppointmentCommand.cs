@@ -36,6 +36,9 @@
                 this.currentUser = currentUser;
             }
 
+            // ideally I should raise an event appointment created and in the medical records context should consume it
+            // but since im using the same db models and database couldnt figure that out, if it was microservices separated
+            // from the beggining would have been easier to deal with
             public async Task<Result> Handle(MakeAsClientAppointmentCommand request, CancellationToken cancellationToken)
             {
                 var isClient = this.currentUser.Role == ApplicationConstants.Roles.Client;
